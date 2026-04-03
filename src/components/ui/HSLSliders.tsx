@@ -1,5 +1,7 @@
 "use client";
 
+import { HSL } from "@/lib/game";
+
 interface SliderProps {
   label: string;
   value: number;
@@ -29,12 +31,6 @@ export function Slider({ label, value, min, max, unit, onChange }: SliderProps) 
       />
     </div>
   );
-}
-
-interface HSL {
-  h: number;
-  s: number;
-  l: number;
 }
 
 interface HSLSlidersProps {
