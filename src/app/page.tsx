@@ -1,65 +1,141 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect, startTransition } from "react";
+import chroma from "chroma-js";
+import { HSLSliders } from "@/components/HSLSliders";
+
+const MEMORIZE_TIME = 5;
+
+interface HSL {
+  h: number;
+  s: number;
+  l: number;
+}
+
+type Phase = "start" | "memorize" | "guess" | "results";
+
+function hslToHex(hsl: HSL): string {
+  return chroma.hsl(hsl.h, hsl.s / 100, hsl.l / 100).hex();
+}
+
+function generateRandomHSL(): HSL {
+  return {
+    h: Math.floor(Math.random() * 360),
+    s: 50 + Math.floor(Math.random() * 40),
+    l: 40 + Math.floor(Math.random() * 30),
+  };
+}
+
+function calculateScore(original: string, guess: string): number {
+  const delta = chroma.deltaE(original, guess);
+  return Math.max(0, Math.round(100 - delta));
+}
 
 export default function Home() {
+  const [phase, setPhase] = useState<Phase>("start");
+  const [timeLeft, setTimeLeft] = useState(MEMORIZE_TIME);
+  const [original, setOriginal] = useState<string>("");
+  const [guess, setGuess] = useState<HSL>({ h: 180, s: 50, l: 50 });
+  const [score, setScore] = useState(0);
+
+  function startGame() {
+    const color = generateRandomHSL();
+    setOriginal(hslToHex(color));
+    setGuess({ h: 180, s: 50, l: 50 });
+    setTimeLeft(MEMORIZE_TIME);
+    setPhase("memorize");
+  }
+
+  useEffect(() => {
+    if (phase !== "memorize") return;
+    if (timeLeft <= 0) {
+      startTransition(() => {
+        setPhase("guess");
+      });
+      return;
+    }
+    const timer = setTimeout(() => setTimeLeft((t) => t - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [phase, timeLeft]);
+
+  function handleSubmit() {
+    const guessHex = hslToHex(guess);
+    const finalScore = calculateScore(original, guessHex);
+    setScore(finalScore);
+    setPhase("results");
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="flex flex-col items-center justify-center min-h-screen bg-zinc-50 px-4">
+      {phase === "start" && (
+        <>
+          <h1 className="text-4xl font-bold mb-4">Color Guesser</h1>
+          <p className="text-zinc-600 mb-8 text-center max-w-md">
+            Memorize a color and try to recreate it from memory.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={startGame}
+            className="px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-zinc-800 transition-colors"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            Play Now
+          </button>
+        </>
+      )}
+
+      {phase === "memorize" && (
+        <>
+          <p className="text-zinc-600 mb-4">Memorize this color</p>
+          <div
+            className="w-48 h-48 rounded-2xl shadow-lg mb-8"
+            style={{ backgroundColor: original }}
+          />
+          <p className="text-2xl font-mono">{timeLeft}s</p>
+        </>
+      )}
+
+      {phase === "guess" && (
+        <>
+          <p className="text-zinc-600 mb-6">Guess the color</p>
+          <div
+            className="w-32 h-32 rounded-2xl shadow-lg mb-8 border-4 border-zinc-200"
+            style={{ backgroundColor: hslToHex(guess) }}
+          />
+          <HSLSliders hsl={guess} onChange={setGuess} />
+          <button
+            onClick={handleSubmit}
+            className="mt-8 px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-zinc-800 transition-colors"
+          >
+            Submit
+          </button>
+        </>
+      )}
+
+      {phase === "results" && (
+        <>
+          <h1 className="text-3xl font-bold mb-2">Results</h1>
+          <p className="text-5xl font-bold mb-8">{score}/100</p>
+
+          <div className="flex items-center gap-4 bg-white p-4 rounded-xl shadow">
+            <div
+              className="w-16 h-16 rounded-lg border border-zinc-200"
+              style={{ backgroundColor: original }}
+              title="Original"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <div
+              className="w-16 h-16 rounded-lg border border-zinc-200"
+              style={{ backgroundColor: hslToHex(guess) }}
+              title="Your guess"
+            />
+          </div>
+
+          <button
+            onClick={() => setPhase("start")}
+            className="mt-8 px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-zinc-800 transition-colors"
           >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            Play Again
+          </button>
+        </>
+      )}
+    </main>
   );
 }
