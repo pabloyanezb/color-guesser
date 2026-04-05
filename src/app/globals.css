@@ -63,3 +63,39 @@ input[type="range"]::-moz-range-thumb {
   border: 3px solid #fff;
   box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
 }
+
+@keyframes digit-wheel {
+  0% {
+    transform: translateY(-5%);
+    filter: blur(0.2px);
+  }
+  50% {
+    transform: translateY(2%);
+    filter: blur(0.1px);
+  }
+  100% {
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes digit-settle {
+  0% {
+    transform: translateY(-15%);
+    filter: blur(1px);
+  }
+  100% {
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.digit-wheel {
+  animation: digit-wheel 0.2s ease-in-out infinite;
+  display: inline-block;
+}
+
+.digit-settle {
+  animation: digit-settle 0.5s linear forwards;
+  display: inline-block;
+}
