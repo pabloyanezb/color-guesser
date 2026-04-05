@@ -10,68 +10,45 @@ interface ResultsPhaseProps {
   onPlayAgain: () => void;
 }
 
-interface DigitProps {
-  value: string;
-  index: number;
-}
+const CONFIG = {
+  cycles: 8,
+  cycleDelay: 100,
+  digitDelay: 80,
+  showDelay: 300,
+};
 
-function Digit({ value, index }: DigitProps) {
-  const [displayValue, setDisplayValue] = useState("0");
-  const [phase, setPhase] = useState<"rolling" | "settling" | "done">("rolling");
+function Digit({ value, index }: { value: string; index: number }) {
+  const [display, setDisplay] = useState("0");
+  const [rolling, setRolling] = useState(true);
 
   useEffect(() => {
-    const delay = index * 80;
-    const totalCycles = 8;
-    const cycleDuration = 80;
-    
-    const startTimeout = setTimeout(() => {
+    const start = setTimeout(() => {
       let cycle = 0;
-      
       const roll = () => {
-        const randomDigit = Math.floor(Math.random() * 10).toString();
-        setDisplayValue(randomDigit);
-        cycle++;
-        
-        if (cycle < totalCycles) {
-          setTimeout(roll, cycleDuration);
+        setDisplay(Math.floor(Math.random() * 10).toString());
+        if (++cycle < CONFIG.cycles) {
+          setTimeout(roll, CONFIG.cycleDelay);
         } else {
-          setDisplayValue(value);
-          setPhase("settling");
-          setTimeout(() => setPhase("done"), 500);
+          setDisplay(value);
+          setRolling(false);
         }
       };
-      
       roll();
-    }, delay);
+    }, index * CONFIG.digitDelay);
 
-    return () => clearTimeout(startTimeout);
+    return () => clearTimeout(start);
   }, [value, index]);
 
-  const getClassName = () => {
-    let classes = "inline-block w-10 text-center relative";
-    
-    if (phase === "rolling") {
-      classes += " digit-wheel";
-    } else if (phase === "settling") {
-      classes += " digit-settle";
-    }
-    
-    return classes;
-  };
-
-  return (
-    <span className={getClassName()}>
-      {displayValue}
-    </span>
-  );
+  const animClass = rolling ? "digit-wheel" : "digit-settle";
+  return <span className={`inline-block w-10 text-center ${animClass}`}>{display}</span>;
 }
 
 export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPhaseProps) {
   const scoreStr = score.toFixed(1);
-  const [showScore, setShowScore] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowScore(true), 300);
+    const timer = setTimeout(() => setVisible(true), CONFIG.showDelay);
     return () => clearTimeout(timer);
   }, []);
 
@@ -80,29 +57,32 @@ export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPha
       <p className="text-xl uppercase font-bold tracking-widest">Results</p>
       
       <div className="text-7xl font-bold font-mono text-center flex justify-center overflow-hidden">
-        {showScore ? (
-          <>
-            {scoreStr.split("").map((char, i) => {
-              if (char === ".") {
-                return <span key={i} className="mx-1">.</span>;
-              }
-              return <Digit key={i} value={char} index={i} />;
-            })}
-          </>
+        {visible ? (
+          scoreStr.split("").map((c, i) => 
+            c === "." ? (
+              <span key={i} className="mx-1">.</span>
+            ) : (
+              <Digit key={i} value={c} index={i} />
+            )
+          )
         ) : (
           <span className="opacity-0">0</span>
         )}
       </div>
       
       <div className="flex justify-center">
-        <ColorSwatch color={original} size="lg" bordered>
-          <div className="flex items-center justify-center gap-0 w-full h-full">
-            <div
-              className="flex-1 h-full"
+        <ColorSwatch
+          color={original}
+          size="lg"
+          bordered
+        >
+          <div className="flex w-full h-full">
+            <div 
+              className="flex-1"
               style={{ backgroundColor: original }}
             />
             <div
-              className="flex-1 h-full border-l-4 border-black"
+              className="flex-1 border-l-4 border-black"
               style={{ backgroundColor: guess }}
             />
           </div>
@@ -111,7 +91,7 @@ export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPha
 
       <button
         onClick={onPlayAgain}
-        className="w-full py-4 bg-red-500 text-black text-2xl uppercase font-bold border-4 border-black cursor-pointer hover:bg-red-400 transition-colors"
+        className="w-full py-4 bg-red-500 text-black text-2xl uppercase font-bold border-4 border-black hover:bg-red-400"
       >
         Play Again
       </button>
