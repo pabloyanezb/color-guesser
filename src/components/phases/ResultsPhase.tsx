@@ -21,7 +21,7 @@ function Digit({ value, index }: DigitProps) {
 
   useEffect(() => {
     const delay = index * 80;
-    const totalCycles = 10 + index * 5;
+    const totalCycles = 8;
     const cycleDuration = 80;
     
     const startTimeout = setTimeout(() => {
