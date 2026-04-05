@@ -47,24 +47,30 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-zinc-50 px-4">
-      {phase === "start" && <StartPhase onStart={startGame} />}
-
-      {phase === "memorize" && (
-        <MemorizePhase color={original} timeLeft={timeLeft} />
-      )}
-
-      {phase === "guess" && (
-        <GuessPhase hsl={guess} onChange={setGuess} onSubmit={handleSubmit} />
-      )}
-
-      {phase === "results" && (
-        <ResultsPhase
-          original={original}
-          guess={hslToHex(guess)}
-          score={score}
-          onPlayAgain={() => setPhase("start")}
-        />
-      )}
+      <div className="w-full max-w-2xl">
+        {phase === "start" && <StartPhase onStart={startGame} />}
+        
+        {phase !== "start" && (
+          <>
+            <div className="flex flex-col gap-4">
+              {phase === "memorize" && (
+                <MemorizePhase color={original} timeLeft={timeLeft} />
+              )}
+              {phase === "guess" && (
+                <GuessPhase hsl={guess} onChange={setGuess} onSubmit={handleSubmit} />
+              )}
+              {phase === "results" && (
+                <ResultsPhase
+                  original={original}
+                  guess={hslToHex(guess)}
+                  score={score}
+                  onPlayAgain={() => setPhase("start")}
+                />
+              )}
+            </div>
+          </>
+        )}
+      </div>
     </main>
   );
 }
