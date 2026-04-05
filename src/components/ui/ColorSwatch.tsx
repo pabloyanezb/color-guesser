@@ -1,20 +1,23 @@
 interface ColorSwatchProps {
   color: string;
   size?: "sm" | "md" | "lg";
-  border?: boolean;
+  bordered?: boolean;
+  children?: React.ReactNode;
 }
 
 const sizes = {
-  sm: "w-12 h-12",
-  md: "w-32 h-32",
-  lg: "w-48 h-48",
+  sm: "w-24 h-16",
+  md: "w-48 h-32",
+  lg: "w-80 h-48",
 };
 
-export function ColorSwatch({ color, size = "md", border = false }: ColorSwatchProps) {
+export function ColorSwatch({ color, size = "md", bordered = false, children }: ColorSwatchProps) {
   return (
     <div
-      className={`${sizes[size]} rounded-2xl shadow-lg ${border ? "border-4 border-zinc-200" : ""}`}
+      className={`${sizes[size]} border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center ${bordered ? "border-4 border-black" : ""}`}
       style={{ backgroundColor: color }}
-    />
+    >
+      {children}
+    </div>
   );
 }

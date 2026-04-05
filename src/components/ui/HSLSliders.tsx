@@ -13,22 +13,20 @@ interface SliderProps {
 
 export function Slider({ label, value, min, max, unit, onChange }: SliderProps) {
   return (
-    <div className="flex flex-col gap-2 w-full max-w-xs">
-      <div className="flex justify-between text-sm font-medium">
-        <span>{label}</span>
-        <span className="font-mono">
-          {Math.round(value)}
-          {unit}
-        </span>
-      </div>
+    <div className="flex items-center gap-3 w-full">
+      <span className="text-xs uppercase font-bold w-20">{label}</span>
       <input
         type="range"
         min={min}
         max={max}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full h-3 rounded-full appearance-none cursor-pointer bg-zinc-300"
+        className="flex-1 h-3 rounded-full appearance-none cursor-pointer bg-zinc-300"
       />
+      <span className="text-xs font-mono w-10 text-right">
+        {Math.round(value)}
+        {unit}
+      </span>
     </div>
   );
 }
@@ -40,7 +38,7 @@ interface HSLSlidersProps {
 
 export function HSLSliders({ hsl, onChange }: HSLSlidersProps) {
   return (
-    <div className="flex flex-col gap-6 items-center">
+    <div className="flex flex-col gap-3 w-full">
       <Slider
         label="Hue"
         value={hsl.h}

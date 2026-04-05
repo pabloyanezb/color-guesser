@@ -4,17 +4,19 @@ interface StartPhaseProps {
 
 export function StartPhase({ onStart }: StartPhaseProps) {
   return (
-    <>
-      <h1 className="text-4xl font-bold mb-4">Color Guesser</h1>
-      <p className="text-zinc-600 mb-8 text-center max-w-md">
-        Memorize a color and try to recreate it from memory.
+    <div className="flex flex-col gap-8">
+      <h1 className="text-8xl uppercase font-anton leading-none max-w-sm">
+        COLOR GUESSER
+      </h1>
+      <p className="text-lg text-zinc-600 max-w-sm">
+        How well can you remember colors? We show you one color, then you recreate it.
       </p>
       <button
         onClick={onStart}
-        className="px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-zinc-800 transition-colors"
+        className="w-full py-4 bg-red-500 text-black text-2xl uppercase font-anton border-4 border-black cursor-pointer hover:bg-red-400 transition-colors"
       >
-        Play Now
+        PLAY
       </button>
-    </>
+    </div>
   );
 }

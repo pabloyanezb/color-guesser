@@ -9,21 +9,31 @@ interface ResultsPhaseProps {
 
 export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPhaseProps) {
   return (
-    <>
-      <h1 className="text-3xl font-bold mb-2">Results</h1>
-      <p className="text-5xl font-bold mb-8">{score}/100</p>
-
-      <div className="flex items-center gap-4 bg-white p-4 rounded-xl shadow">
-        <ColorSwatch color={original} size="sm" />
-        <ColorSwatch color={guess} size="sm" />
+    <div className="flex flex-col gap-8 w-full">
+      <p className="text-xl uppercase font-bold tracking-widest">Results</p>
+      <div className="text-7xl font-bold text-center">{score}/100</div>
+      
+      <div className="flex justify-center">
+        <ColorSwatch color={original} size="lg" bordered>
+          <div className="flex items-center justify-center gap-0 w-full h-full">
+            <div
+              className="flex-1 h-full"
+              style={{ backgroundColor: original }}
+            />
+            <div
+              className="flex-1 h-full border-l-4 border-black"
+              style={{ backgroundColor: guess }}
+            />
+          </div>
+        </ColorSwatch>
       </div>
 
       <button
         onClick={onPlayAgain}
-        className="mt-8 px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-zinc-800 transition-colors"
+        className="w-full py-4 bg-red-500 text-black text-2xl uppercase font-bold border-4 border-black cursor-pointer hover:bg-red-400 transition-colors"
       >
         Play Again
       </button>
-    </>
+    </div>
   );
 }

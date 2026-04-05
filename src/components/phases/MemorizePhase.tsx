@@ -7,10 +7,11 @@ interface MemorizePhaseProps {
 
 export function MemorizePhase({ color, timeLeft }: MemorizePhaseProps) {
   return (
-    <>
-      <p className="text-zinc-600 mb-4">Memorize this color</p>
-      <ColorSwatch color={color} size="lg" />
-      <p className="text-2xl font-mono mt-8">{timeLeft}s</p>
-    </>
+    <div className="flex flex-col gap-8 w-full items-center">
+      <p className="text-xl uppercase font-bold tracking-widest">Memorize</p>
+      <ColorSwatch color={color} size="lg" bordered>
+        <span className="text-6xl font-bold">{timeLeft}</span>
+      </ColorSwatch>
+    </div>
   );
 }

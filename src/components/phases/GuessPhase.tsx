@@ -10,16 +10,20 @@ interface GuessPhaseProps {
 
 export function GuessPhase({ hsl, onChange, onSubmit }: GuessPhaseProps) {
   return (
-    <>
-      <p className="text-zinc-600 mb-6">Guess the color</p>
-      <ColorSwatch color={hslToHex(hsl)} size="md" border />
-      <HSLSliders hsl={hsl} onChange={onChange} />
+    <div className="flex flex-col gap-8 w-full">
+      <p className="text-xl uppercase font-bold tracking-widest">Guess</p>
+      <div className="w-full">
+        <HSLSliders hsl={hsl} onChange={onChange} />
+      </div>
+      <div className="flex justify-center">
+        <ColorSwatch color={hslToHex(hsl)} size="lg" bordered />
+      </div>
       <button
         onClick={onSubmit}
-        className="mt-8 px-6 py-3 bg-black text-white rounded-full font-medium hover:bg-zinc-800 transition-colors"
+        className="w-full py-4 bg-black text-white text-2xl uppercase font-bold border-4 border-black cursor-pointer hover:bg-zinc-800 transition-colors"
       >
         Submit
       </button>
-    </>
+    </div>
   );
 }
