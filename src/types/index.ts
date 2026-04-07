@@ -12,11 +12,6 @@ export interface ColorResult {
   score: number;
 }
 
-export interface ColorSequence {
-  colors: string[];
-  targetColor: string;
-}
-
 export interface GameConfig {
   rotationCount: number;
   rotationBaseDelay: number;

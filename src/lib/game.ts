@@ -1,7 +1,5 @@
 import chroma from "chroma-js";
-import type { HSL, ColorSequence } from "@/types";
-
-export type { HSL, ColorSequence } from "@/types";
+import type { HSL } from "@/types";
 
 export function hslToHex(hsl: HSL): string {
   return chroma.hsl(hsl.h, hsl.s / 100, hsl.l / 100).hex();
