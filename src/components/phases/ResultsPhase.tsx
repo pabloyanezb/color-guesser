@@ -90,7 +90,7 @@ export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPha
 
       <Button
         onClick={onPlayAgain}
-        variant="danger"
+        variant="brand"
         fullWidth
       >
         Play Again

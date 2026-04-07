@@ -12,7 +12,7 @@ export function StartPhase({ onStart }: StartPhaseProps) {
       </p>
       <Button
         onClick={onStart}
-        variant="danger"
+        variant="brand"
         fullWidth
       >
         PLAY
