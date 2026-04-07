@@ -21,7 +21,7 @@ export function GuessPhase({ hsl, onChange, onSubmit }: GuessPhaseProps) {
           bordered
         />
       </div>
-      <Button 
+      <Button
         onClick={onSubmit}
         variant="primary"
         fullWidth

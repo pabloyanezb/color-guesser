@@ -35,7 +35,7 @@ export default function Home() {
         {phase === "start" && (
           <StartPhase onStart={startGame} />
         )}
-        
+
         {phase === "memorize" && (
           <MemorizePhase
             targetColor={original}

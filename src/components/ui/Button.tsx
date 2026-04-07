@@ -47,7 +47,7 @@ export function Button({ children, onClick, variant = "primary", fullWidth = fal
         v.hover,
         "uppercase font-bold border-4 border-black py-4 text-2xl",
         "cursor-pointer transition-colors",
-        fullWidth && "w-full"
+        fullWidth && "w-full",
       )}
     >
       {children}
