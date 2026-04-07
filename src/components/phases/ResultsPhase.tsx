@@ -97,7 +97,11 @@ export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPha
         </ColorSwatch>
       </div>
 
-      <div className={clsx("transition-opacity duration-500", buttonVisible ? "opacity-100" : "opacity-0")}>
+      <div className={clsx(
+        "transition-opacity duration-500", buttonVisible ?
+        "opacity-100 pointer-events-auto" :
+        "opacity-0 pointer-events-none"
+      )}>
         <Button
           onClick={onPlayAgain}
           variant="brand"
