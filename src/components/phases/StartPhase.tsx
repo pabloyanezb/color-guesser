@@ -1,4 +1,5 @@
 import type { StartPhaseProps } from "@/types";
+import { Button } from "@/components/ui/Button";
 
 export function StartPhase({ onStart }: StartPhaseProps) {
   return (
@@ -9,12 +10,13 @@ export function StartPhase({ onStart }: StartPhaseProps) {
       <p className="text-lg text-zinc-600 max-w-sm">
         How well can you remember colors? We show you one color, then you recreate it.
       </p>
-      <button
+      <Button
         onClick={onStart}
-        className="w-full py-4 bg-red-500 text-black text-2xl uppercase font-anton border-4 border-black cursor-pointer hover:bg-red-400 transition-colors"
+        variant="danger"
+        fullWidth
       >
         PLAY
-      </button>
+      </Button>
     </div>
   );
 }

@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { clsx } from "clsx";
 import type { ResultsPhaseProps } from "@/types";
+import { Button } from "@/components/ui/Button";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
 
 const CONFIG = {
@@ -33,8 +35,11 @@ function Digit({ value, index }: { value: string; index: number }) {
     return () => clearTimeout(start);
   }, [value, index]);
 
-  const animClass = rolling ? "digit-wheel" : "digit-settle";
-  return <span className={`inline-block w-10 text-center ${animClass}`}>{display}</span>;
+  return (
+    <span className={clsx("inline-block w-10 text-center", rolling ? "digit-wheel" : "digit-settle")}>
+      {display}
+    </span>
+  );
 }
 
 export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPhaseProps) {
@@ -65,30 +70,21 @@ export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPha
       </div>
       
       <div className="flex justify-center">
-        <ColorSwatch
-          color={original}
-          size="lg"
-          bordered
-        >
+        <ColorSwatch color={original} size="lg" bordered>
           <div className="flex w-full h-full">
-            <div 
-              className="flex-1"
-              style={{ backgroundColor: original }}
-            />
-            <div
-              className="flex-1 border-l-4 border-black"
-              style={{ backgroundColor: guess }}
-            />
+            <div className="flex-1" style={{ backgroundColor: original }} />
+            <div className="flex-1 border-l-4 border-black" style={{ backgroundColor: guess }} />
           </div>
         </ColorSwatch>
       </div>
 
-      <button
+      <Button
         onClick={onPlayAgain}
-        className="w-full py-4 bg-red-500 text-black text-2xl uppercase font-bold border-4 border-black hover:bg-red-400"
+        variant="danger"
+        fullWidth
       >
         Play Again
-      </button>
+      </Button>
     </div>
   );
 }
