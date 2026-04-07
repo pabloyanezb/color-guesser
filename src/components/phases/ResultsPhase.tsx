@@ -10,7 +10,8 @@ const CONFIG = {
   cycles: 8,
   cycleDelay: 100,
   digitDelay: 80,
-  showDelay: 300,
+  scoreDelay: 300,
+  buttonDelay: 1200,
 };
 
 function Digit({ value, index }: { value: string; index: number }) {
@@ -44,19 +45,27 @@ function Digit({ value, index }: { value: string; index: number }) {
 
 export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPhaseProps) {
   const scoreStr = score.toFixed(1);
-  const [visible, setVisible] = useState(false);
+  const [scoreVisible, setScoreVisible] = useState(false);
+  const [buttonVisible, setButtonVisible] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setVisible(true), CONFIG.showDelay);
+    const timer = setTimeout(() => setScoreVisible(true), CONFIG.scoreDelay);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (scoreVisible) {
+      const timer = setTimeout(() => setButtonVisible(true), CONFIG.buttonDelay);
+      return () => clearTimeout(timer);
+    }
+  }, [scoreVisible]);
 
   return (
     <div className="flex flex-col gap-8 w-full">
       <p className="text-xl uppercase font-bold tracking-widest">Results</p>
       
       <div className="text-7xl font-bold font-mono text-center flex justify-center overflow-hidden">
-        {visible ? (
+        {scoreVisible ? (
           scoreStr.split("").map((c, i) => 
             c === "." ? (
               <span key={i} className="mx-1">.</span>
@@ -88,13 +97,15 @@ export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPha
         </ColorSwatch>
       </div>
 
-      <Button
-        onClick={onPlayAgain}
-        variant="brand"
-        fullWidth
-      >
-        Play Again
-      </Button>
+      <div className={clsx("transition-opacity duration-500", buttonVisible ? "opacity-100" : "opacity-0")}>
+        <Button
+          onClick={onPlayAgain}
+          variant="brand"
+          fullWidth
+        >
+          Play Again
+        </Button>
+      </div>
     </div>
   );
 }
