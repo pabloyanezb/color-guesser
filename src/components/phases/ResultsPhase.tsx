@@ -1,14 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { clsx } from "clsx";
 import type { ResultsPhaseProps } from "@/types";
+import { Button } from "@/components/ui/Button";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
 
 const CONFIG = {
   cycles: 8,
   cycleDelay: 100,
   digitDelay: 80,
-  showDelay: 300,
+  scoreDelay: 300,
+  buttonDelay: 1200,
 };
 
 function Digit({ value, index }: { value: string; index: number }) {
@@ -33,25 +36,36 @@ function Digit({ value, index }: { value: string; index: number }) {
     return () => clearTimeout(start);
   }, [value, index]);
 
-  const animClass = rolling ? "digit-wheel" : "digit-settle";
-  return <span className={`inline-block w-10 text-center ${animClass}`}>{display}</span>;
+  return (
+    <span className={clsx("inline-block w-10 text-center", rolling ? "digit-wheel" : "digit-settle")}>
+      {display}
+    </span>
+  );
 }
 
 export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPhaseProps) {
   const scoreStr = score.toFixed(1);
-  const [visible, setVisible] = useState(false);
+  const [scoreVisible, setScoreVisible] = useState(false);
+  const [buttonVisible, setButtonVisible] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setVisible(true), CONFIG.showDelay);
+    const timer = setTimeout(() => setScoreVisible(true), CONFIG.scoreDelay);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (scoreVisible) {
+      const timer = setTimeout(() => setButtonVisible(true), CONFIG.buttonDelay);
+      return () => clearTimeout(timer);
+    }
+  }, [scoreVisible]);
 
   return (
     <div className="flex flex-col gap-8 w-full">
       <p className="text-xl uppercase font-bold tracking-widest">Results</p>
       
       <div className="text-7xl font-bold font-mono text-center flex justify-center overflow-hidden">
-        {visible ? (
+        {scoreVisible ? (
           scoreStr.split("").map((c, i) => 
             c === "." ? (
               <span key={i} className="mx-1">.</span>
@@ -71,7 +85,7 @@ export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPha
           bordered
         >
           <div className="flex w-full h-full">
-            <div 
+            <div
               className="flex-1"
               style={{ backgroundColor: original }}
             />
@@ -83,12 +97,19 @@ export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPha
         </ColorSwatch>
       </div>
 
-      <button
-        onClick={onPlayAgain}
-        className="w-full py-4 bg-red-500 text-black text-2xl uppercase font-bold border-4 border-black hover:bg-red-400"
-      >
-        Play Again
-      </button>
+      <div className={clsx(
+        "transition-opacity duration-500", buttonVisible ?
+        "opacity-100 pointer-events-auto" :
+        "opacity-0 pointer-events-none"
+      )}>
+        <Button
+          onClick={onPlayAgain}
+          variant="brand"
+          fullWidth
+        >
+          Play Again
+        </Button>
+      </div>
     </div>
   );
 }
