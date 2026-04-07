@@ -14,7 +14,7 @@ export function ColorSwatch({ color, size = "md", bordered = false, children }: 
         sizes[size],
         "border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]",
         "flex items-center justify-center",
-        bordered && "border-4 border-black"
+        bordered && "border-4 border-black",
       )}
       style={{ backgroundColor: color }}
     >

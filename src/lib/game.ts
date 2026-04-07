@@ -32,6 +32,10 @@ export function generateColorSequence(count: number, targetColor: string): strin
   return colors;
 }
 
-export function getRotationDelay(index: number, baseDelay: number = 30, increment: number = 60): number {
-  return baseDelay + (index * increment);
+export function getRotationDelay(
+  index: number,
+  baseDelay = 30,
+  increment = 60,
+): number {
+  return baseDelay + index * increment;
 }

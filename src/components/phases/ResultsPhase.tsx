@@ -37,7 +37,11 @@ function Digit({ value, index }: { value: string; index: number }) {
   }, [value, index]);
 
   return (
-    <span className={clsx("inline-block w-10 text-center", rolling ? "digit-wheel" : "digit-settle")}>
+    <span className={clsx(
+      "inline-block w-10 text-center", rolling ?
+      "digit-wheel" :
+      "digit-settle"
+    )}>
       {display}
     </span>
   );
@@ -63,21 +67,28 @@ export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPha
   return (
     <div className="flex flex-col gap-8 w-full">
       <p className="text-xl uppercase font-bold tracking-widest">Results</p>
-      
+
       <div className="text-7xl font-bold font-mono text-center flex justify-center overflow-hidden">
         {scoreVisible ? (
-          scoreStr.split("").map((c, i) => 
+          scoreStr.split("").map((c, i) =>
             c === "." ? (
-              <span key={i} className="mx-1">.</span>
+              <span
+                key={i}
+                className="mx-1"
+              >.</span>
             ) : (
-              <Digit key={i} value={c} index={i} />
-            )
+              <Digit
+                key={i}
+                value={c}
+                index={i}
+              />
+            ),
           )
         ) : (
           <span className="opacity-0">0</span>
         )}
       </div>
-      
+
       <div className="flex justify-center">
         <ColorSwatch
           color={original}
@@ -97,11 +108,13 @@ export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPha
         </ColorSwatch>
       </div>
 
-      <div className={clsx(
-        "transition-opacity duration-500", buttonVisible ?
-        "opacity-100 pointer-events-auto" :
-        "opacity-0 pointer-events-none"
-      )}>
+      <div
+        className={clsx(
+          "transition-opacity duration-500", buttonVisible ?
+          "opacity-100 pointer-events-auto" :
+          "opacity-0 pointer-events-none",
+        )}
+      >
         <Button
           onClick={onPlayAgain}
           variant="brand"

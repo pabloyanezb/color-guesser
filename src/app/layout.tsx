@@ -25,7 +25,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${anton.variable} ${spaceGrotesk.variable}`}>
+    <html
+      lang="en"
+      className={`${anton.variable} ${spaceGrotesk.variable}`}
+    >
       <body className="min-h-full flex flex-col antialiased bg-zinc-100 text-zinc-900">
         {children}
       </body>
