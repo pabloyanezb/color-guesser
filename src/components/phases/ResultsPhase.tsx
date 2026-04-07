@@ -70,10 +70,20 @@ export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPha
       </div>
       
       <div className="flex justify-center">
-        <ColorSwatch color={original} size="lg" bordered>
+        <ColorSwatch
+          color={original}
+          size="lg"
+          bordered
+        >
           <div className="flex w-full h-full">
-            <div className="flex-1" style={{ backgroundColor: original }} />
-            <div className="flex-1 border-l-4 border-black" style={{ backgroundColor: guess }} />
+            <div
+              className="flex-1"
+              style={{ backgroundColor: original }}
+            />
+            <div
+              className="flex-1 border-l-4 border-black"
+              style={{ backgroundColor: guess }}
+            />
           </div>
         </ColorSwatch>
       </div>
