@@ -1,12 +1,7 @@
-import { HSL, hslToHex } from "@/lib/game";
+import { hslToHex } from "@/lib/game";
+import type { GuessPhaseProps } from "@/types";
 import { HSLSliders } from "@/components/ui/HSLSliders";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
-
-interface GuessPhaseProps {
-  hsl: HSL;
-  onChange: (hsl: HSL) => void;
-  onSubmit: () => void;
-}
 
 export function GuessPhase({ hsl, onChange, onSubmit }: GuessPhaseProps) {
   return (

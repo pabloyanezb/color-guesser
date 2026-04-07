@@ -1,14 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { ResultsPhaseProps } from "@/types";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
-
-interface ResultsPhaseProps {
-  original: string;
-  guess: string;
-  score: number;
-  onPlayAgain: () => void;
-}
 
 const CONFIG = {
   cycles: 8,

@@ -1,6 +1,4 @@
-interface StartPhaseProps {
-  onStart: () => void;
-}
+import type { StartPhaseProps } from "@/types";
 
 export function StartPhase({ onStart }: StartPhaseProps) {
   return (

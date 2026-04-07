@@ -2,12 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { generateColorSequence, getRotationDelay } from "@/lib/game";
+import type { MemorizePhaseProps } from "@/types";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
-
-interface MemorizePhaseProps {
-  targetColor: string;
-  onComplete: () => void;
-}
 
 const ROTATION_COUNT = 4;
 const TARGET_DISPLAY_TIME = 400;
