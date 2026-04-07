@@ -1,10 +1,7 @@
 import chroma from "chroma-js";
+import type { HSL, ColorSequence } from "@/types";
 
-export interface HSL {
-  h: number;
-  s: number;
-  l: number;
-}
+export type { HSL, ColorSequence } from "@/types";
 
 export function hslToHex(hsl: HSL): string {
   return chroma.hsl(hsl.h, hsl.s / 100, hsl.l / 100).hex();
@@ -26,11 +23,6 @@ export function calculateScore(original: string, guess: string): number {
 export function generateRandomColor(): string {
   const hsl = generateRandomHSL();
   return hslToHex(hsl);
-}
-
-export interface ColorSequence {
-  colors: string[];
-  targetColor: string;
 }
 
 export function generateColorSequence(count: number, targetColor: string): string[] {

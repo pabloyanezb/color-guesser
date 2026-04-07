@@ -1,9 +1,4 @@
-interface ColorSwatchProps {
-  color: string;
-  size?: "sm" | "md" | "lg";
-  bordered?: boolean;
-  children?: React.ReactNode;
-}
+import type { ColorSwatchProps } from "@/types";
 
 const sizes = {
   sm: "w-24 h-16",

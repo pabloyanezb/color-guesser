@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { HSL, generateRandomHSL, hslToHex, calculateScore } from "@/lib/game";
+import type { Phase, HSL } from "@/types";
+import { generateRandomHSL, hslToHex, calculateScore } from "@/lib/game";
 import { StartPhase } from "@/components/phases/StartPhase";
 import { MemorizePhase } from "@/components/phases/MemorizePhase";
 import { GuessPhase } from "@/components/phases/GuessPhase";
 import { ResultsPhase } from "@/components/phases/ResultsPhase";
-
-type Phase = "start" | "memorize" | "guess" | "results";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>("start");

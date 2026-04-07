@@ -1,6 +1,6 @@
 "use client";
 
-import { HSL } from "@/lib/game";
+import type { HSL } from "@/types";
 
 interface SliderProps {
   label: string;
