@@ -2,23 +2,48 @@
 
 import type { HSL } from "@/types";
 
-interface SliderProps {
+const HUE_STOPS = [
+  { deg: 0, color: "hsl(0, 100%, 50%)" },
+  { deg: 60, color: "hsl(60, 100%, 50%)" },
+  { deg: 120, color: "hsl(120, 100%, 50%)" },
+  { deg: 180, color: "hsl(180, 100%, 50%)" },
+  { deg: 240, color: "hsl(240, 100%, 50%)" },
+  { deg: 300, color: "hsl(300, 100%, 50%)" },
+  { deg: 360, color: "hsl(360, 100%, 50%)" },
+];
+
+const HUE_GRADIENT = `linear-gradient(to right, ${HUE_STOPS.map((s) => s.color).join(", ")})`;
+
+function getSaturationGradient(h: number, l: number) {
+  const low = `hsl(${h}, 0%, ${l}%)`;
+  const high = `hsl(${h}, 100%, ${l}%)`;
+  return `linear-gradient(to right, ${low}, ${high})`;
+}
+
+function getLightnessGradient(h: number, s: number) {
+  const dark = `hsl(${h}, ${s}%, 0%)`;
+  const mid = `hsl(${h}, ${s}%, 50%)`;
+  const light = `hsl(${h}, ${s}%, 100%)`;
+  return `linear-gradient(to right, ${dark}, ${mid}, ${light})`;
+}
+
+interface SliderConfig {
   label: string;
   value: number;
   min: number;
   max: number;
   unit: string;
-  gradient?: string;
+  getGradient: () => string;
   onChange: (value: number) => void;
 }
 
-export function Slider({ label, value, min, max, unit, gradient, onChange }: SliderProps) {
+function Slider({ label, value, min, max, unit, getGradient, onChange }: SliderConfig) {
   return (
     <div className="flex items-center gap-3 w-full">
       <span className="text-xs uppercase font-bold w-20">{label}</span>
       <div
         className="relative flex-1 h-3 rounded-full"
-        style={{ background: gradient }}
+        style={{ background: getGradient() }}
       >
         <input
           type="range"
@@ -43,13 +68,6 @@ interface HSLSlidersProps {
 }
 
 export function HSLSliders({ hsl, onChange }: HSLSlidersProps) {
-  const hueGradient =
-    "linear-gradient(to right, hsl(0, 100%, 50%), hsl(60, 100%, 50%), hsl(120, 100%, 50%), hsl(180, 100%, 50%), hsl(240, 100%, 50%), hsl(300, 100%, 50%), hsl(360, 100%, 50%))";
-
-  const saturationGradient = `linear-gradient(to right, hsl(${hsl.h}, 0%, ${hsl.l}%), hsl(${hsl.h}, 100%, ${hsl.l}%))`;
-
-  const lightnessGradient = `linear-gradient(to right, hsl(${hsl.h}, ${hsl.s}%, 0%), hsl(${hsl.h}, ${hsl.s}%, 50%), hsl(${hsl.h}, ${hsl.s}%, 100%))`;
-
   return (
     <div className="flex flex-col gap-3 w-full">
       <Slider
@@ -58,7 +76,7 @@ export function HSLSliders({ hsl, onChange }: HSLSlidersProps) {
         min={0}
         max={360}
         unit="°"
-        gradient={hueGradient}
+        getGradient={() => HUE_GRADIENT}
         onChange={(h) => onChange({ ...hsl, h })}
       />
       <Slider
@@ -67,7 +85,7 @@ export function HSLSliders({ hsl, onChange }: HSLSlidersProps) {
         min={0}
         max={100}
         unit="%"
-        gradient={saturationGradient}
+        getGradient={() => getSaturationGradient(hsl.h, hsl.l)}
         onChange={(s) => onChange({ ...hsl, s })}
       />
       <Slider
@@ -76,7 +94,7 @@ export function HSLSliders({ hsl, onChange }: HSLSlidersProps) {
         min={0}
         max={100}
         unit="%"
-        gradient={lightnessGradient}
+        getGradient={() => getLightnessGradient(hsl.h, hsl.s)}
         onChange={(l) => onChange({ ...hsl, l })}
       />
     </div>
