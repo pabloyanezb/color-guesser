@@ -37,11 +37,13 @@ function Digit({ value, index }: { value: string; index: number }) {
   }, [value, index]);
 
   return (
-    <span className={clsx(
-      "inline-block w-10 text-center", rolling ?
-      "digit-wheel" :
-      "digit-settle"
-    )}>
+    <span
+      className={clsx(
+        "inline-block w-10 text-center", rolling ?
+          "digit-wheel" :
+          "digit-settle",
+      )}
+    >
       {display}
     </span>
   );
@@ -111,8 +113,8 @@ export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPha
       <div
         className={clsx(
           "transition-opacity duration-500", buttonVisible ?
-          "opacity-100 pointer-events-auto" :
-          "opacity-0 pointer-events-none",
+            "opacity-100 pointer-events-auto" :
+            "opacity-0 pointer-events-none",
         )}
       >
         <Button
