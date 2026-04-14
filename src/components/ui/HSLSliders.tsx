@@ -32,17 +32,16 @@ interface SliderConfig {
   value: number;
   min: number;
   max: number;
-  unit: string;
   getGradient: () => string;
   onChange: (value: number) => void;
 }
 
-function Slider({ label, value, min, max, unit, getGradient, onChange }: SliderConfig) {
+function Slider({ label, value, min, max, getGradient, onChange }: SliderConfig) {
   return (
     <div className="flex items-center gap-3 w-full">
       <span className="text-xs uppercase font-bold w-20">{label}</span>
       <div
-        className="relative flex-1 h-3 rounded-full"
+        className="relative flex-1 h-6 border-2 border-black"
         style={{ background: getGradient() }}
       >
         <input
@@ -51,13 +50,9 @@ function Slider({ label, value, min, max, unit, getGradient, onChange }: SliderC
           max={max}
           value={value}
           onChange={(e) => onChange(Number(e.target.value))}
-          className="absolute inset-0 w-full h-3 rounded-full appearance-none cursor-pointer slider-gradient"
+          className="absolute inset-0 w-full appearance-none cursor-pointer slider-gradient"
         />
       </div>
-      <span className="text-xs font-mono w-10 text-right">
-        {Math.round(value)}
-        {unit}
-      </span>
     </div>
   );
 }
@@ -75,7 +70,6 @@ export function HSLSliders({ hsl, onChange }: HSLSlidersProps) {
         value={hsl.h}
         min={0}
         max={360}
-        unit="°"
         getGradient={() => HUE_GRADIENT}
         onChange={(h) => onChange({ ...hsl, h })}
       />
@@ -84,7 +78,6 @@ export function HSLSliders({ hsl, onChange }: HSLSlidersProps) {
         value={hsl.s}
         min={0}
         max={100}
-        unit="%"
         getGradient={() => getSaturationGradient(hsl.h, hsl.l)}
         onChange={(s) => onChange({ ...hsl, s })}
       />
@@ -93,7 +86,6 @@ export function HSLSliders({ hsl, onChange }: HSLSlidersProps) {
         value={hsl.l}
         min={0}
         max={100}
-        unit="%"
         getGradient={() => getLightnessGradient(hsl.h, hsl.s)}
         onChange={(l) => onChange({ ...hsl, l })}
       />
