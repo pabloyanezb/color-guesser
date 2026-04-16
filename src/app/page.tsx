@@ -13,36 +13,38 @@ export default function Home() {
   const [original, setOriginal] = useState("");
   const [guess, setGuess] = useState<HSL>({ h: 180, s: 50, l: 50 });
   const [score, setScore] = useState(0);
+  const [animKey, setAnimKey] = useState(0);
 
   const startGame = useCallback(() => {
     setOriginal(hslToHex(generateRandomHSL()));
     setGuess({ h: 180, s: 50, l: 50 });
+    setAnimKey((k) => k + 1);
     setPhase("memorize");
   }, []);
 
   const goToGuess = useCallback(() => {
+    setAnimKey((k) => k + 1);
     setPhase("guess");
   }, []);
 
   const handleSubmit = useCallback(() => {
     setScore(calculateScore(original, hslToHex(guess)));
+    setAnimKey((k) => k + 1);
     setPhase("results");
   }, [guess, original]);
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-zinc-50 px-4">
-      <div className="w-full max-w-2xl">
+      <div className="w-full max-w-2xl" key={animKey}>
         {phase === "start" && (
           <StartPhase onStart={startGame} />
         )}
-
         {phase === "memorize" && (
           <MemorizePhase
             targetColor={original}
             onComplete={goToGuess}
           />
         )}
-
         {phase === "guess" && (
           <GuessPhase
             hsl={guess}
@@ -50,7 +52,6 @@ export default function Home() {
             onSubmit={handleSubmit}
           />
         )}
-
         {phase === "results" && (
           <ResultsPhase
             original={original}

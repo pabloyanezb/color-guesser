@@ -7,7 +7,12 @@ const sizes = {
   lg: "w-80 h-48",
 };
 
-export function ColorSwatch({ color, size = "md", bordered = false, children }: ColorSwatchProps) {
+export function ColorSwatch({
+  color,
+  size = "md",
+  bordered = false,
+  children,
+}: ColorSwatchProps) {
   return (
     <div
       className={clsx(
@@ -16,12 +21,7 @@ export function ColorSwatch({ color, size = "md", bordered = false, children }: 
         "flex items-center justify-center",
         bordered && "border-4 border-black",
       )}
-      style={{
-        backgroundColor: color,
-        animation: "none",
-        opacity: 1,
-        transform: "none",
-      }}
+      style={{ backgroundColor: color }}
     >
       {children}
     </div>

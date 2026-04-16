@@ -7,13 +7,11 @@ import { ColorSwatch } from "@/components/ui/ColorSwatch";
 export function GuessPhase({ hsl, onChange, onSubmit }: GuessPhaseProps) {
   return (
     <div className="flex flex-col gap-8 w-full">
-      <p className="animate-in text-xl uppercase font-bold tracking-widest">Guess</p>
-      <div className="w-full animate-in animate-in-delay-1">
-        <HSLSliders
-          hsl={hsl}
-          onChange={onChange}
-        />
-      </div>
+      <p className="fade-in text-xl uppercase font-bold tracking-widest">Guess</p>
+      <HSLSliders
+        hsl={hsl}
+        onChange={onChange}
+      />
       <div className="flex justify-center">
         <ColorSwatch
           color={hslToHex(hsl)}
@@ -21,7 +19,7 @@ export function GuessPhase({ hsl, onChange, onSubmit }: GuessPhaseProps) {
           bordered
         />
       </div>
-      <div className="animate-in animate-in-delay-3">
+      <div className="fade-in">
         <Button
           onClick={onSubmit}
           variant="primary"
