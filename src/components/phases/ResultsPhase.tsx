@@ -120,7 +120,7 @@ export function ResultsPhase({
             variant="brand"
             fullWidth
           >
-            Play Again
+            <span className="fade-in-delay">Play Again</span>
           </Button>
         )}
       </div>
