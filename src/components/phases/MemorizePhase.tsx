@@ -13,7 +13,6 @@ export function MemorizePhase({ targetColor, onComplete }: MemorizePhaseProps) {
   const [displayColor, setDisplayColor] = useState("");
   const [phase, setPhase] = useState<"rotate" | "display" | "countdown">("rotate");
   const [countdown, setCountdown] = useState(MEMORIZE_TIME);
-  const [key, setKey] = useState(0);
 
   useEffect(() => {
     if (phase !== "rotate") return;
@@ -24,7 +23,6 @@ export function MemorizePhase({ targetColor, onComplete }: MemorizePhaseProps) {
     const tick = () => {
       if (index < sequence.length) {
         setDisplayColor(sequence[index]);
-        setKey((k) => k + 1);
         index++;
 
         if (index < sequence.length) {
@@ -51,16 +49,17 @@ export function MemorizePhase({ targetColor, onComplete }: MemorizePhaseProps) {
 
   return (
     <div className="flex flex-col gap-4 w-full items-center">
-      <p className="text-xl uppercase font-bold tracking-widest">
+      <p className="fade-in text-xl uppercase font-bold tracking-widest">
         {phase === "countdown" ? "Memorize" : "Get Ready"}
       </p>
       <ColorSwatch
         color={displayColor || targetColor}
         size="lg"
         bordered
-        key={key}
       >
-        {phase === "countdown" && <span className="text-6xl font-bold">{countdown}</span>}
+        {phase === "countdown" && (
+          <span className="text-6xl font-bold">{countdown}</span>
+        )}
       </ColorSwatch>
     </div>
   );

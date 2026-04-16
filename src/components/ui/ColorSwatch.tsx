@@ -7,7 +7,12 @@ const sizes = {
   lg: "w-80 h-48",
 };
 
-export function ColorSwatch({ color, size = "md", bordered = false, children }: ColorSwatchProps) {
+export function ColorSwatch({
+  color,
+  size = "md",
+  bordered = false,
+  children,
+}: ColorSwatchProps) {
   return (
     <div
       className={clsx(

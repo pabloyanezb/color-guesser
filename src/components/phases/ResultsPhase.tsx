@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { clsx } from "clsx";
 import type { ResultsPhaseProps } from "@/types";
 import { Button } from "@/components/ui/Button";
@@ -10,11 +10,17 @@ const CONFIG = {
   cycles: 8,
   cycleDelay: 100,
   digitDelay: 80,
-  scoreDelay: 300,
-  buttonDelay: 1200,
 };
 
-function Digit({ value, index }: { value: string; index: number }) {
+function Digit({
+  value,
+  index,
+  onSettled,
+}: {
+  value: string;
+  index: number;
+  onSettled: () => void;
+}) {
   const [display, setDisplay] = useState("0");
   const [rolling, setRolling] = useState(true);
 
@@ -28,20 +34,20 @@ function Digit({ value, index }: { value: string; index: number }) {
         } else {
           setDisplay(value);
           setRolling(false);
+          onSettled();
         }
       };
       roll();
     }, index * CONFIG.digitDelay);
 
     return () => clearTimeout(start);
-  }, [value, index]);
+  }, [value, index, onSettled]);
 
   return (
     <span
       className={clsx(
-        "inline-block w-10 text-center", rolling ?
-          "digit-wheel" :
-          "digit-settle",
+        "inline-block w-10 text-center",
+        rolling ? "digit-wheel" : "digit-settle",
       )}
     >
       {display}
@@ -49,45 +55,42 @@ function Digit({ value, index }: { value: string; index: number }) {
   );
 }
 
-export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPhaseProps) {
+export function ResultsPhase({
+  original,
+  guess,
+  score,
+  onPlayAgain,
+}: ResultsPhaseProps) {
   const scoreStr = score.toFixed(1);
-  const [scoreVisible, setScoreVisible] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(false);
+  const settledCountRef = useRef(0);
+  const totalDigits = scoreStr.replace(".", "").length;
 
-  useEffect(() => {
-    const timer = setTimeout(() => setScoreVisible(true), CONFIG.scoreDelay);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    if (scoreVisible) {
-      const timer = setTimeout(() => setButtonVisible(true), CONFIG.buttonDelay);
-      return () => clearTimeout(timer);
+  const handleSettled = () => {
+    settledCountRef.current += 1;
+    if (settledCountRef.current >= totalDigits) {
+      setButtonVisible(true);
     }
-  }, [scoreVisible]);
+  };
 
   return (
     <div className="flex flex-col gap-8 w-full">
-      <p className="text-xl uppercase font-bold tracking-widest">Results</p>
+      <p className="fade-in text-xl uppercase font-bold tracking-widest">
+        Results
+      </p>
 
       <div className="text-7xl font-bold font-mono text-center flex justify-center overflow-hidden">
-        {scoreVisible ? (
-          scoreStr.split("").map((c, i) =>
-            c === "." ? (
-              <span
-                key={i}
-                className="mx-1"
-              >.</span>
-            ) : (
-              <Digit
-                key={i}
-                value={c}
-                index={i}
-              />
-            ),
-          )
-        ) : (
-          <span className="opacity-0">0</span>
+        {scoreStr.split("").map((c, i) =>
+          c === "." ? (
+            <span key={i} className="mx-1">.</span>
+          ) : (
+            <Digit
+              key={i}
+              value={c}
+              index={i}
+              onSettled={handleSettled}
+            />
+          ),
         )}
       </div>
 
@@ -110,20 +113,16 @@ export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPha
         </ColorSwatch>
       </div>
 
-      <div
-        className={clsx(
-          "transition-opacity duration-500", buttonVisible ?
-            "opacity-100 pointer-events-auto" :
-            "opacity-0 pointer-events-none",
+      <div className="h-11">
+        {buttonVisible && (
+          <Button
+            onClick={onPlayAgain}
+            variant="brand"
+            fullWidth
+          >
+            <span className="fade-in-delay">Play Again</span>
+          </Button>
         )}
-      >
-        <Button
-          onClick={onPlayAgain}
-          variant="brand"
-          fullWidth
-        >
-          Play Again
-        </Button>
       </div>
     </div>
   );
