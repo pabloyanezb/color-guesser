@@ -68,9 +68,9 @@ export function ResultsPhase({ original, guess, score, onPlayAgain }: ResultsPha
 
   return (
     <div className="flex flex-col gap-8 w-full">
-      <p className="text-xl uppercase font-bold tracking-widest">Results</p>
+      <p className="animate-in text-xl uppercase font-bold tracking-widest">Results</p>
 
-      <div className="text-7xl font-bold font-mono text-center flex justify-center overflow-hidden">
+      <div className="animate-in animate-in-delay-2 text-7xl font-bold font-mono text-center flex justify-center overflow-hidden">
         {scoreVisible ? (
           scoreStr.split("").map((c, i) =>
             c === "." ? (

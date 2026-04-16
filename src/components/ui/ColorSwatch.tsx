@@ -16,7 +16,12 @@ export function ColorSwatch({ color, size = "md", bordered = false, children }: 
         "flex items-center justify-center",
         bordered && "border-4 border-black",
       )}
-      style={{ backgroundColor: color }}
+      style={{
+        backgroundColor: color,
+        animation: "none",
+        opacity: 1,
+        transform: "none",
+      }}
     >
       {children}
     </div>

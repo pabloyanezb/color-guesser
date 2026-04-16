@@ -51,7 +51,7 @@ export function MemorizePhase({ targetColor, onComplete }: MemorizePhaseProps) {
 
   return (
     <div className="flex flex-col gap-4 w-full items-center">
-      <p className="text-xl uppercase font-bold tracking-widest">
+      <p className="animate-in text-xl uppercase font-bold tracking-widest">
         {phase === "countdown" ? "Memorize" : "Get Ready"}
       </p>
       <ColorSwatch
