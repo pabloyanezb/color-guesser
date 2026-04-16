@@ -113,8 +113,8 @@ export function ResultsPhase({
         </ColorSwatch>
       </div>
 
-      {buttonVisible && (
-        <div className="fade-in">
+      <div className="h-11">
+        {buttonVisible && (
           <Button
             onClick={onPlayAgain}
             variant="brand"
@@ -122,8 +122,8 @@ export function ResultsPhase({
           >
             Play Again
           </Button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
