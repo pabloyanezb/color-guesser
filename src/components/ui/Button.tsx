@@ -2,9 +2,12 @@ import { clsx } from "clsx";
 
 interface ButtonProps {
   children: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   variant?: "primary" | "brand" | "info" | "success" | "warning";
   fullWidth?: boolean;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
+  className?: string;
 }
 
 const variants = {
@@ -35,19 +38,31 @@ const variants = {
   },
 };
 
-export function Button({ children, onClick, variant = "primary", fullWidth = false }: ButtonProps) {
+export function Button({
+  children,
+  onClick,
+  variant = "primary",
+  fullWidth = false,
+  disabled = false,
+  type = "button",
+  className,
+}: ButtonProps) {
   const v = variants[variant];
 
   return (
     <button
-      onClick={onClick}
+      type={type}
+      disabled={disabled}
+      onClick={disabled ? undefined : onClick}
       className={clsx(
         v.bg,
         v.text,
-        v.hover,
-        "uppercase font-bold border-4 border-black py-4 text-2xl",
+        !disabled && v.hover,
+        "uppercase font-bold border-4 border-black py-4 px-8 text-2xl",
         "cursor-pointer transition-colors",
         fullWidth && "w-full",
+        disabled && "opacity-50 cursor-not-allowed pointer-events-none",
+        className,
       )}
     >
       {children}
