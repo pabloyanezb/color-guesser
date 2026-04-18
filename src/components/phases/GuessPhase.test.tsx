@@ -62,4 +62,26 @@ describe("GuessPhase", () => {
     fireEvent.click(screen.getByText("Submit"));
     expect(mockOnSubmit).toHaveBeenCalledTimes(1);
   });
+
+  it("calls onChange when sliders change", () => {
+    const mockOnChange = jest.fn();
+    render(
+      <GuessPhase
+        hsl={{ h: 0, s: 50, l: 50 }}
+        onChange={mockOnChange}
+        onSubmit={jest.fn()}
+      />,
+    );
+
+    const sliders = screen.getAllByRole("slider");
+
+    fireEvent.change(sliders[0], { target: { value: 120 } });
+    expect(mockOnChange).toHaveBeenCalledWith({ h: 120, s: 50, l: 50 });
+
+    fireEvent.change(sliders[1], { target: { value: 75 } });
+    expect(mockOnChange).toHaveBeenCalledWith({ h: 0, s: 75, l: 50 });
+
+    fireEvent.change(sliders[2], { target: { value: 80 } });
+    expect(mockOnChange).toHaveBeenCalledWith({ h: 0, s: 50, l: 80 });
+  });
 });
