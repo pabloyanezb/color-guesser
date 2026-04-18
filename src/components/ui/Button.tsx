@@ -58,7 +58,7 @@ export function Button({
         v.bg,
         v.text,
         !disabled && v.hover,
-        "uppercase font-bold border-4 border-black py-4 text-2xl",
+        "uppercase font-bold border-4 border-black py-4 px-8 text-2xl",
         "cursor-pointer transition-colors",
         fullWidth && "w-full",
         disabled && "opacity-50 cursor-not-allowed pointer-events-none",
