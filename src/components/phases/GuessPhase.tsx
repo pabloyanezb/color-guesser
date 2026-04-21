@@ -4,7 +4,12 @@ import { Button } from "@/components/ui/Button";
 import { HSLSliders } from "@/components/ui/HSLSliders";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
 
-export function GuessPhase({ hsl, colorIndex, onChange, onSubmit }: GuessPhaseProps) {
+export function GuessPhase({
+  hsl,
+  colorIndex,
+  onChange,
+  onSubmit,
+}: GuessPhaseProps) {
   return (
     <div className="flex flex-col gap-8 w-full">
       <p className="fade-in text-xl uppercase font-bold tracking-widest">
