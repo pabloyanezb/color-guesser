@@ -7,6 +7,7 @@ import { StartPhase } from "@/components/phases/StartPhase";
 import { MemorizePhase } from "@/components/phases/MemorizePhase";
 import { GuessPhase } from "@/components/phases/GuessPhase";
 import { ResultsPhase } from "@/components/phases/ResultsPhase";
+import { FinalResultsPhase } from "@/components/phases/FinalResultsPhase";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>("start");
@@ -57,9 +58,14 @@ export default function Home() {
       setAnimKey((k) => k + 1);
       setPhase("memorize");
     } else {
-      setPhase("start");
+      setAnimKey((k) => k + 1);
+      setPhase("final");
     }
   }, [currentRound]);
+
+  const handlePlayAgain = useCallback(() => {
+    setPhase("start");
+  }, []);
 
   const currentRoundData = rounds[currentRound];
 
@@ -86,9 +92,13 @@ export default function Home() {
         {phase === "results" && currentRoundData && (
           <ResultsPhase
             round={currentRoundData}
-            colorIndex={currentRound}
             onContinue={handleContinue}
-            onPlayAgain={() => setPhase("start")}
+          />
+        )}
+        {phase === "final" && (
+          <FinalResultsPhase
+            rounds={rounds}
+            onPlayAgain={handlePlayAgain}
           />
         )}
       </div>

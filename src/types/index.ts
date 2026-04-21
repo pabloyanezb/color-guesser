@@ -49,8 +49,11 @@ export interface GuessPhaseProps {
 
 export interface ResultsPhaseProps {
   round: GameRound;
-  colorIndex: number;
   onContinue: () => void;
+}
+
+export interface FinalResultsPhaseProps {
+  rounds: GameRound[];
   onPlayAgain: () => void;
 }
 
