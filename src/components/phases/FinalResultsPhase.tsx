@@ -1,59 +1,10 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { clsx } from "clsx";
+import { useState, useRef } from "react";
 import type { GameRound } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
-
-const CONFIG = {
-  cycles: 8,
-  cycleDelay: 100,
-  digitDelay: 80,
-};
-
-function Digit({
-  value,
-  index,
-  onSettled,
-}: {
-  value: string;
-  index: number;
-  onSettled: () => void;
-}) {
-  const [display, setDisplay] = useState("0");
-  const [rolling, setRolling] = useState(true);
-
-  useEffect(() => {
-    const start = setTimeout(() => {
-      let cycle = 0;
-      const roll = () => {
-        setDisplay(Math.floor(Math.random() * 10).toString());
-        if (++cycle < CONFIG.cycles) {
-          setTimeout(roll, CONFIG.cycleDelay);
-        } else {
-          setDisplay(value);
-          setRolling(false);
-          onSettled();
-        }
-      };
-      roll();
-    }, index * CONFIG.digitDelay);
-
-    return () => clearTimeout(start);
-  }, [value, index, onSettled]);
-
-  return (
-    <span
-      className={clsx(
-        "inline-block w-8 text-center",
-        rolling ? "digit-wheel" : "digit-settle",
-      )}
-    >
-      {display}
-    </span>
-  );
-}
+import { RollingDigit } from "../ui/RollingDigit";
 
 interface FinalResultsPhaseProps {
   rounds: GameRound[];
@@ -61,7 +12,7 @@ interface FinalResultsPhaseProps {
 }
 
 export function FinalResultsPhase({ rounds, onPlayAgain }: FinalResultsPhaseProps) {
-  const averageScore = rounds.reduce((sum, r) => sum + (r.score ?? 0), 3) / rounds.length;
+  const averageScore = rounds.reduce((sum, r) => sum + (r.score ?? 0), 0) / rounds.length;
   const scoreStr = averageScore.toFixed(1);
   const [buttonVisible, setButtonVisible] = useState(false);
   const settledCountRef = useRef(0);
@@ -85,20 +36,21 @@ export function FinalResultsPhase({ rounds, onPlayAgain }: FinalResultsPhaseProp
           c === "." ? (
             <span key={i} className="mx-1">.</span>
           ) : (
-            <Digit
+            <RollingDigit
               key={i}
               value={c}
               index={i}
               onSettled={handleSettled}
+              width="w-8"
             />
           ),
         )}
       </div>
 
-      <div className="flex gap-4 justify-center mb-6">
+      <div className="flex flex-col gap-4 items-center">
         {rounds.map((round, index) => (
           <div key={index} className="flex flex-col items-center gap-2">
-            <span className="text-lg font-bold">{index + 1}/3: {round.score?.toFixed(1)}</span>
+            <span className="text-lg font-bold">Color {index + 1}: {round.score?.toFixed(1)}</span>
             <ColorSwatch
               color={round.targetColor}
               size="md"

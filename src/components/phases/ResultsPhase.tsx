@@ -1,59 +1,10 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { clsx } from "clsx";
+import { useState, useRef } from "react";
 import type { ResultsPhaseProps } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
-
-const CONFIG = {
-  cycles: 8,
-  cycleDelay: 100,
-  digitDelay: 80,
-};
-
-function Digit({
-  value,
-  index,
-  onSettled,
-}: {
-  value: string;
-  index: number;
-  onSettled: () => void;
-}) {
-  const [display, setDisplay] = useState("0");
-  const [rolling, setRolling] = useState(true);
-
-  useEffect(() => {
-    const start = setTimeout(() => {
-      let cycle = 0;
-      const roll = () => {
-        setDisplay(Math.floor(Math.random() * 10).toString());
-        if (++cycle < CONFIG.cycles) {
-          setTimeout(roll, CONFIG.cycleDelay);
-        } else {
-          setDisplay(value);
-          setRolling(false);
-          onSettled();
-        }
-      };
-      roll();
-    }, index * CONFIG.digitDelay);
-
-    return () => clearTimeout(start);
-  }, [value, index, onSettled]);
-
-  return (
-    <span
-      className={clsx(
-        "inline-block w-10 text-center",
-        rolling ? "digit-wheel" : "digit-settle",
-      )}
-    >
-      {display}
-    </span>
-  );
-}
+import { RollingDigit } from "../ui/RollingDigit";
 
 export function ResultsPhase({ round, onContinue }: ResultsPhaseProps) {
   const score = round.score ?? 0;
@@ -80,7 +31,7 @@ export function ResultsPhase({ round, onContinue }: ResultsPhaseProps) {
           c === "." ? (
             <span key={i} className="mx-1">.</span>
           ) : (
-            <Digit
+            <RollingDigit
               key={i}
               value={c}
               index={i}
