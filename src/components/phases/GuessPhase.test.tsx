@@ -2,21 +2,23 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { GuessPhase } from "./GuessPhase";
 
 describe("GuessPhase", () => {
-  it("renders title", () => {
+  it("renders title with color index", () => {
     render(
       <GuessPhase
         hsl={{ h: 180, s: 50, l: 50 }}
+        colorIndex={1}
         onChange={jest.fn()}
         onSubmit={jest.fn()}
       />,
     );
-    expect(screen.getByText("Guess")).toBeInTheDocument();
+    expect(screen.getByText("2/3")).toBeInTheDocument();
   });
 
   it("renders HSLSliders", () => {
     render(
       <GuessPhase
         hsl={{ h: 180, s: 50, l: 50 }}
+        colorIndex={0}
         onChange={jest.fn()}
         onSubmit={jest.fn()}
       />,
@@ -30,6 +32,7 @@ describe("GuessPhase", () => {
     render(
       <GuessPhase
         hsl={{ h: 180, s: 50, l: 50 }}
+        colorIndex={0}
         onChange={jest.fn()}
         onSubmit={jest.fn()}
       />,
@@ -42,6 +45,7 @@ describe("GuessPhase", () => {
     render(
       <GuessPhase
         hsl={{ h: 180, s: 50, l: 50 }}
+        colorIndex={0}
         onChange={jest.fn()}
         onSubmit={jest.fn()}
       />,
@@ -54,6 +58,7 @@ describe("GuessPhase", () => {
     render(
       <GuessPhase
         hsl={{ h: 180, s: 50, l: 50 }}
+        colorIndex={0}
         onChange={jest.fn()}
         onSubmit={mockOnSubmit}
       />,
@@ -68,6 +73,7 @@ describe("GuessPhase", () => {
     render(
       <GuessPhase
         hsl={{ h: 0, s: 50, l: 50 }}
+        colorIndex={0}
         onChange={mockOnChange}
         onSubmit={jest.fn()}
       />,

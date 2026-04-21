@@ -1,4 +1,4 @@
-export type Phase = "start" | "memorize" | "guess" | "results";
+export type Phase = "start" | "memorize" | "guess" | "results" | "final";
 
 export interface HSL {
   h: number;
@@ -20,6 +20,17 @@ export interface GameConfig {
   memorizeTime: number;
 }
 
+export interface GameRound {
+  targetColor: string;
+  guessColor?: string;
+  score?: number;
+}
+
+export interface GameState {
+  rounds: GameRound[];
+  currentRound: number;
+}
+
 export interface StartPhaseProps {
   onStart: () => void;
 }
@@ -31,14 +42,18 @@ export interface MemorizePhaseProps {
 
 export interface GuessPhaseProps {
   hsl: HSL;
+  colorIndex: number;
   onChange: (hsl: HSL) => void;
   onSubmit: () => void;
 }
 
 export interface ResultsPhaseProps {
-  original: string;
-  guess: string;
-  score: number;
+  round: GameRound;
+  onContinue: () => void;
+}
+
+export interface FinalResultsPhaseProps {
+  rounds: GameRound[];
   onPlayAgain: () => void;
 }
 

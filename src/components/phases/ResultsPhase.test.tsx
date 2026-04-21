@@ -2,38 +2,38 @@ import { render, screen } from "@testing-library/react";
 import { ResultsPhase } from "./ResultsPhase";
 
 describe("ResultsPhase", () => {
-  it("renders title", () => {
+  const mockRound = {
+    targetColor: "#ff0000",
+    guessColor: "#00ff00",
+    score: 85.5,
+  };
+
+  it("renders Result title", () => {
     render(
       <ResultsPhase
-        original="#ff0000"
-        guess="#00ff00"
-        score={85.5}
-        onPlayAgain={jest.fn()}
+        round={mockRound}
+        onContinue={jest.fn()}
       />,
     );
-    expect(screen.getByText("Results")).toBeInTheDocument();
+    expect(screen.getByText("Result")).toBeInTheDocument();
   });
 
   it("renders ColorSwatch with both colors", () => {
     render(
       <ResultsPhase
-        original="#ff0000"
-        guess="#00ff00"
-        score={85.5}
-        onPlayAgain={jest.fn()}
+        round={mockRound}
+        onContinue={jest.fn()}
       />,
     );
     const swatches = document.querySelectorAll("[style*='background-color']");
     expect(swatches.length).toBeGreaterThan(0);
   });
 
-  it("does not render Play Again button initially", () => {
+  it("does not render button initially", () => {
     const { container } = render(
       <ResultsPhase
-        original="#ff0000"
-        guess="#00ff00"
-        score={85.5}
-        onPlayAgain={jest.fn()}
+        round={mockRound}
+        onContinue={jest.fn()}
       />,
     );
     expect(container.querySelector("button")).not.toBeInTheDocument();
