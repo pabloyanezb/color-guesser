@@ -56,11 +56,13 @@ function Digit({
 }
 
 export function ResultsPhase({
-  original,
-  guess,
-  score,
+  round,
+  colorIndex,
+  onContinue,
   onPlayAgain,
 }: ResultsPhaseProps) {
+  const isLastRound = colorIndex === 2;
+  const score = round.score ?? 0;
   const scoreStr = score.toFixed(1);
   const [buttonVisible, setButtonVisible] = useState(false);
   const settledCountRef = useRef(0);
@@ -76,7 +78,7 @@ export function ResultsPhase({
   return (
     <div className="flex flex-col gap-8 w-full">
       <p className="fade-in text-xl uppercase font-bold tracking-widest">
-        Results
+        {isLastRound ? "Final Results" : "Result"}
       </p>
 
       <div className="text-7xl font-bold font-mono text-center flex justify-center overflow-hidden">
@@ -96,18 +98,18 @@ export function ResultsPhase({
 
       <div className="flex justify-center">
         <ColorSwatch
-          color={original}
+          color={round.targetColor}
           size="lg"
           bordered
         >
           <div className="flex w-full h-full">
             <div
               className="flex-1"
-              style={{ backgroundColor: original }}
+              style={{ backgroundColor: round.targetColor }}
             />
             <div
               className="flex-1 border-l-4 border-black"
-              style={{ backgroundColor: guess }}
+              style={{ backgroundColor: round.guessColor }}
             />
           </div>
         </ColorSwatch>
@@ -116,11 +118,13 @@ export function ResultsPhase({
       <div className="h-11">
         {buttonVisible && (
           <Button
-            onClick={onPlayAgain}
+            onClick={isLastRound ? onPlayAgain : onContinue}
             variant="brand"
             fullWidth
           >
-            <span className="fade-in-delay">Play Again</span>
+            <span className="fade-in-delay">
+              {isLastRound ? "Play Again" : "Continue"}
+            </span>
           </Button>
         )}
       </div>
