@@ -16,7 +16,7 @@ export function ResultsPhase({ round, onContinue }: ResultsPhaseProps) {
 
   useEffect(() => {
     const scoreTimer = setTimeout(() => {
-      setScoreStr(score.toFixed(1));
+      setScoreStr(score.toString());
     }, SCORE_CHANGE_DELAY);
     return () => clearTimeout(scoreTimer);
   }, [score]);
