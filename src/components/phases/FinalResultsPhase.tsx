@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/Button";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
 import { RollingNumber } from "@/components/ui/RollingDigit";
 
+const ROLLING_DURATION = 1000;
+const SCORE_CHANGE_DELAY = 300;
+
 interface FinalResultsPhaseProps {
   rounds: GameRound[];
   onPlayAgain: () => void;
@@ -13,15 +16,22 @@ interface FinalResultsPhaseProps {
 
 export function FinalResultsPhase({ rounds, onPlayAgain }: FinalResultsPhaseProps) {
   const averageScore = rounds.reduce((sum, r) => sum + (r.score ?? 0), 0) / rounds.length;
-  const averageStr = averageScore.toFixed(1);
+  const [scoreStr, setScoreStr] = useState("00.0");
   const [buttonVisible, setButtonVisible] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const scoreTimer = setTimeout(() => {
+      setScoreStr(averageScore.toFixed(1));
+    }, SCORE_CHANGE_DELAY);
+    return () => clearTimeout(scoreTimer);
+  }, [averageScore]);
+
+  useEffect(() => {
+    const buttonTimer = setTimeout(() => {
       setButtonVisible(true);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [averageStr]);
+    }, ROLLING_DURATION + SCORE_CHANGE_DELAY);
+    return () => clearTimeout(buttonTimer);
+  }, []);
 
   return (
     <div className="flex flex-col gap-8 w-full">
@@ -31,8 +41,8 @@ export function FinalResultsPhase({ rounds, onPlayAgain }: FinalResultsPhaseProp
 
       <div className="text-7xl font-bold font-mono text-center flex justify-center">
         <RollingNumber
-          value={averageStr}
-          isAnimating={true}
+          value={scoreStr}
+          duration={ROLLING_DURATION}
         />
       </div>
 

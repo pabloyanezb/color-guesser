@@ -39,7 +39,7 @@ describe("ResultsPhase", () => {
     );
     expect(screen.queryByText("Continue")).not.toBeInTheDocument();
     act(() => {
-      jest.advanceTimersByTime(1000);
+      jest.advanceTimersByTime(1300);
     });
     expect(screen.getByText("Continue")).toBeInTheDocument();
     jest.useRealTimers();

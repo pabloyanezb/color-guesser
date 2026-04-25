@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { RollingTimer } from "@/components/ui/RollingDigit";
+import { RollingNumber } from "@/components/ui/RollingDigit";
 
 interface ClockTimerProps {
   milliseconds: number;
@@ -19,7 +19,7 @@ export function ClockTimer({ milliseconds, onComplete }: ClockTimerProps) {
 
   return (
     <span className="inline-flex items-center text-6xl font-bold font-mono tabular-nums">
-      <RollingTimer value={seconds} isAnimating={true} />
+      <RollingNumber value={seconds.toString()} />
     </span>
   );
 }

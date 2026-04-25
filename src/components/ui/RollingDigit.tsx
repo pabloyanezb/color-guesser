@@ -2,28 +2,26 @@
 
 import { useEffect, useRef, useState } from "react";
 
-interface RollingNumberProps {
-  value: string;
-  isAnimating: boolean;
-  className?: string;
-  digitDuration?: number;
+interface RollingDigitWheelProps {
+  value: number;
+  duration?: number;
 }
 
-function RollingDigitWheel({ value, duration }: { value: number; duration: number }) {
-  const [displayValue, setDisplayValue] = useState(0);
+function RollingDigitWheel({ value, duration = 800 }: RollingDigitWheelProps) {
+  const [displayValue, setDisplayValue] = useState(value);
   const animationRef = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);
-  const startValueRef = useRef(0);
-  const targetValueRef = useRef(value);
+  const prevValueRef = useRef(value);
 
   useEffect(() => {
-    if (displayValue === value) {
+    if (value === prevValueRef.current) {
       return;
     }
 
-    targetValueRef.current = value;
-    startValueRef.current = displayValue;
+    prevValueRef.current = value;
     startTimeRef.current = null;
+
+    const startValue = displayValue;
 
     const animate = (timestamp: number) => {
       if (!startTimeRef.current) {
@@ -34,8 +32,7 @@ function RollingDigitWheel({ value, duration }: { value: number; duration: numbe
       const progress = Math.min(elapsed / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
 
-      const currentValue =
-        startValueRef.current + (targetValueRef.current - startValueRef.current) * eased;
+      const currentValue = startValue + (value - startValue) * eased;
 
       setDisplayValue(currentValue);
 
@@ -76,11 +73,13 @@ function RollingDigitWheel({ value, duration }: { value: number; duration: numbe
   );
 }
 
-export function RollingNumber({
-  value,
-  className = "",
-  digitDuration = 800,
-}: RollingNumberProps) {
+interface RollingNumberProps {
+  value: string;
+  className?: string;
+  duration?: number;
+}
+
+export function RollingNumber({ value, className = "", duration }: RollingNumberProps) {
   const parts = value.split("");
 
   return (
@@ -97,7 +96,7 @@ export function RollingNumber({
           <div key={index} className="relative w-[0.6em] h-[1em]">
             <RollingDigitWheel
               value={Number.parseInt(char, 10)}
-              duration={digitDuration}
+              duration={duration}
             />
           </div>
         );
@@ -108,23 +107,14 @@ export function RollingNumber({
 
 interface RollingTimerProps {
   value: number;
-  isAnimating: boolean;
   className?: string;
-  digitDuration?: number;
 }
 
-export function RollingTimer({
-  value,
-  isAnimating,
-  className = "",
-  digitDuration = 800,
-}: RollingTimerProps) {
+export function RollingTimer({ value, className = "" }: RollingTimerProps) {
   return (
     <RollingNumber
       value={value.toString()}
-      isAnimating={isAnimating}
       className={className}
-      digitDuration={digitDuration}
     />
   );
 }

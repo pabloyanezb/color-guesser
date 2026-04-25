@@ -6,17 +6,27 @@ import { Button } from "@/components/ui/Button";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
 import { RollingNumber } from "@/components/ui/RollingDigit";
 
+const ROLLING_DURATION = 1000;
+const SCORE_CHANGE_DELAY = 300;
+
 export function ResultsPhase({ round, onContinue }: ResultsPhaseProps) {
   const score = round.score ?? 0;
-  const scoreStr = score.toFixed(1);
+  const [scoreStr, setScoreStr] = useState("00.0");
   const [buttonVisible, setButtonVisible] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const scoreTimer = setTimeout(() => {
+      setScoreStr(score.toFixed(1));
+    }, SCORE_CHANGE_DELAY);
+    return () => clearTimeout(scoreTimer);
+  }, [score]);
+
+  useEffect(() => {
+    const buttonTimer = setTimeout(() => {
       setButtonVisible(true);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [scoreStr]);
+    }, ROLLING_DURATION + SCORE_CHANGE_DELAY);
+    return () => clearTimeout(buttonTimer);
+  }, []);
 
   return (
     <div className="flex flex-col gap-8 w-full">
@@ -25,7 +35,10 @@ export function ResultsPhase({ round, onContinue }: ResultsPhaseProps) {
       </p>
 
       <div className="text-7xl font-bold font-mono text-center flex justify-center">
-        <RollingNumber value={scoreStr} isAnimating={true} />
+        <RollingNumber
+          value={scoreStr}
+          duration={ROLLING_DURATION}
+        />
       </div>
 
       <div className="flex justify-center">
