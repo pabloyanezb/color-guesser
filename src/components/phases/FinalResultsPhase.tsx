@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { GameRound } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
-import { RollingNumber } from "@/components/ui/RollingDigit";
+import { RollingNumber } from "@/components/ui/RollingNumber";
 
 const ROLLING_DURATION = 1000;
 const SCORE_CHANGE_DELAY = 300;

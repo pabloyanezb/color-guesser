@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
-import { RollingNumber } from "@/components/ui/RollingDigit";
+import { RollingNumber } from "./RollingNumber";
 
-interface ClockTimerProps {
+interface RollingTimerProps {
   milliseconds: number;
   onComplete: () => void;
 }
 
-export function ClockTimer({ milliseconds, onComplete }: ClockTimerProps) {
+export function RollingTimer({ milliseconds, onComplete }: RollingTimerProps) {
   const seconds = Math.ceil(milliseconds / 1000);
 
   useEffect(() => {

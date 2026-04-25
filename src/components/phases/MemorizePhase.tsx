@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { generateColorSequence, getRotationDelay } from "@/lib/game";
 import type { MemorizePhaseProps } from "@/types";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
-import { ClockTimer } from "@/components/ui/ClockTimer";
+import { RollingTimer } from "@/components/ui/RollingTimer";
 
 const ROTATION_COUNT = 4;
 const TARGET_DISPLAY_TIME = 400;
@@ -41,15 +41,11 @@ export function MemorizePhase({ targetColor, onComplete }: MemorizePhaseProps) {
 
   useEffect(() => {
     if (phase !== "countdown") return;
-    if (countdownMs <= 0) {
-      onComplete();
-      return;
-    }
     const timer = setTimeout(() => setCountdownMs((c) => {
       return c - COUNTDOWN_INTERVAL;
     }), COUNTDOWN_INTERVAL);
     return () => clearTimeout(timer);
-  }, [phase, countdownMs, onComplete]);
+  }, [phase, countdownMs]);
 
   return (
     <div className="flex flex-col gap-4 w-full items-center">
@@ -62,9 +58,9 @@ export function MemorizePhase({ targetColor, onComplete }: MemorizePhaseProps) {
         bordered
       >
         {phase === "countdown" && (
-          <ClockTimer
+          <RollingTimer
             milliseconds={countdownMs}
-            onComplete={() => {}}
+            onComplete={onComplete}
           />
         )}
       </ColorSwatch>

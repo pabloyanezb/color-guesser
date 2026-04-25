@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 
-interface RollingDigitWheelProps {
+interface RollingDigitProps {
   value: number;
   duration?: number;
 }
 
-function RollingDigitWheel({ value, duration = 800 }: RollingDigitWheelProps) {
+export function RollingDigit({ value, duration = 800 }: RollingDigitProps) {
   const [displayValue, setDisplayValue] = useState(value);
   const animationRef = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);
@@ -70,51 +70,5 @@ function RollingDigitWheel({ value, duration = 800 }: RollingDigitWheelProps) {
         ))}
       </div>
     </div>
-  );
-}
-
-interface RollingNumberProps {
-  value: string;
-  className?: string;
-  duration?: number;
-}
-
-export function RollingNumber({ value, className = "", duration }: RollingNumberProps) {
-  const parts = value.split("");
-
-  return (
-    <div className={`flex items-center font-mono tabular-nums ${className}`}>
-      {parts.map((char, index) => {
-        if (char === ".") {
-          return (
-            <span key={index} className="text-[0.8em] pb-1">
-              .
-            </span>
-          );
-        }
-        return (
-          <div key={index} className="relative w-[0.6em] h-[1em]">
-            <RollingDigitWheel
-              value={Number.parseInt(char, 10)}
-              duration={duration}
-            />
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-interface RollingTimerProps {
-  value: number;
-  className?: string;
-}
-
-export function RollingTimer({ value, className = "" }: RollingTimerProps) {
-  return (
-    <RollingNumber
-      value={value.toString()}
-      className={className}
-    />
   );
 }
