@@ -4,15 +4,17 @@ import { useState, useEffect } from "react";
 import { generateColorSequence, getRotationDelay } from "@/lib/game";
 import type { MemorizePhaseProps } from "@/types";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
+import { RollingTimer } from "@/components/ui/RollingTimer";
 
 const ROTATION_COUNT = 4;
 const TARGET_DISPLAY_TIME = 400;
 const MEMORIZE_TIME = 5;
+const COUNTDOWN_INTERVAL = Math.round(1000 / 60);
 
 export function MemorizePhase({ targetColor, onComplete }: MemorizePhaseProps) {
   const [displayColor, setDisplayColor] = useState("");
   const [phase, setPhase] = useState<"rotate" | "display" | "countdown">("rotate");
-  const [countdown, setCountdown] = useState(MEMORIZE_TIME);
+  const [countdownMs, setCountdownMs] = useState(MEMORIZE_TIME * 1000);
 
   useEffect(() => {
     if (phase !== "rotate") return;
@@ -39,13 +41,11 @@ export function MemorizePhase({ targetColor, onComplete }: MemorizePhaseProps) {
 
   useEffect(() => {
     if (phase !== "countdown") return;
-    if (countdown <= 0) {
-      onComplete();
-      return;
-    }
-    const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
+    const timer = setTimeout(() => setCountdownMs((c) => {
+      return c - COUNTDOWN_INTERVAL;
+    }), COUNTDOWN_INTERVAL);
     return () => clearTimeout(timer);
-  }, [phase, countdown, onComplete]);
+  }, [phase, countdownMs]);
 
   return (
     <div className="flex flex-col gap-4 w-full items-center">
@@ -58,7 +58,10 @@ export function MemorizePhase({ targetColor, onComplete }: MemorizePhaseProps) {
         bordered
       >
         {phase === "countdown" && (
-          <span className="text-6xl font-bold">{countdown}</span>
+          <RollingTimer
+            milliseconds={countdownMs}
+            onComplete={onComplete}
+          />
         )}
       </ColorSwatch>
     </div>

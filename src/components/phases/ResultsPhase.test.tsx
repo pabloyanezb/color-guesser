@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import { ResultsPhase } from "./ResultsPhase";
 
 describe("ResultsPhase", () => {
@@ -29,13 +29,19 @@ describe("ResultsPhase", () => {
     expect(swatches.length).toBeGreaterThan(0);
   });
 
-  it("does not render button initially", () => {
-    const { container } = render(
+  it("renders Continue button after delay", () => {
+    jest.useFakeTimers();
+    render(
       <ResultsPhase
         round={mockRound}
         onContinue={jest.fn()}
       />,
     );
-    expect(container.querySelector("button")).not.toBeInTheDocument();
+    expect(screen.queryByText("Continue")).not.toBeInTheDocument();
+    act(() => {
+      jest.advanceTimersByTime(1300);
+    });
+    expect(screen.getByText("Continue")).toBeInTheDocument();
+    jest.useRealTimers();
   });
 });

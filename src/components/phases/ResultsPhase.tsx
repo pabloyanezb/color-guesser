@@ -1,73 +1,32 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { clsx } from "clsx";
+import { useEffect, useState } from "react";
 import type { ResultsPhaseProps } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
+import { RollingNumber } from "@/components/ui/RollingNumber";
 
-const CONFIG = {
-  cycles: 8,
-  cycleDelay: 100,
-  digitDelay: 80,
-};
-
-function Digit({
-  value,
-  index,
-  onSettled,
-}: {
-  value: string;
-  index: number;
-  onSettled: () => void;
-}) {
-  const [display, setDisplay] = useState("0");
-  const [rolling, setRolling] = useState(true);
-
-  useEffect(() => {
-    const start = setTimeout(() => {
-      let cycle = 0;
-      const roll = () => {
-        setDisplay(Math.floor(Math.random() * 10).toString());
-        if (++cycle < CONFIG.cycles) {
-          setTimeout(roll, CONFIG.cycleDelay);
-        } else {
-          setDisplay(value);
-          setRolling(false);
-          onSettled();
-        }
-      };
-      roll();
-    }, index * CONFIG.digitDelay);
-
-    return () => clearTimeout(start);
-  }, [value, index, onSettled]);
-
-  return (
-    <span
-      className={clsx(
-        "inline-block w-10 text-center",
-        rolling ? "digit-wheel" : "digit-settle",
-      )}
-    >
-      {display}
-    </span>
-  );
-}
+const ROLLING_DURATION = 1000;
+const SCORE_CHANGE_DELAY = 300;
 
 export function ResultsPhase({ round, onContinue }: ResultsPhaseProps) {
   const score = round.score ?? 0;
-  const scoreStr = score.toFixed(1);
+  const [scoreStr, setScoreStr] = useState("00.0");
   const [buttonVisible, setButtonVisible] = useState(false);
-  const settledCountRef = useRef(0);
-  const totalDigits = scoreStr.replace(".", "").length;
 
-  const handleSettled = () => {
-    settledCountRef.current += 1;
-    if (settledCountRef.current >= totalDigits) {
+  useEffect(() => {
+    const scoreTimer = setTimeout(() => {
+      setScoreStr(score.toFixed(1));
+    }, SCORE_CHANGE_DELAY);
+    return () => clearTimeout(scoreTimer);
+  }, [score]);
+
+  useEffect(() => {
+    const buttonTimer = setTimeout(() => {
       setButtonVisible(true);
-    }
-  };
+    }, ROLLING_DURATION + SCORE_CHANGE_DELAY);
+    return () => clearTimeout(buttonTimer);
+  }, []);
 
   return (
     <div className="flex flex-col gap-8 w-full">
@@ -75,19 +34,11 @@ export function ResultsPhase({ round, onContinue }: ResultsPhaseProps) {
         Result
       </p>
 
-      <div className="text-7xl font-bold font-mono text-center flex justify-center overflow-hidden">
-        {scoreStr.split("").map((c, i) =>
-          c === "." ? (
-            <span key={i} className="mx-1">.</span>
-          ) : (
-            <Digit
-              key={i}
-              value={c}
-              index={i}
-              onSettled={handleSettled}
-            />
-          ),
-        )}
+      <div className="text-7xl font-bold font-mono text-center flex justify-center">
+        <RollingNumber
+          value={scoreStr}
+          duration={ROLLING_DURATION}
+        />
       </div>
 
       <div className="flex justify-center">
