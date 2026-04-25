@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import type { GameRound } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
-import { RollingDigit } from "../ui/RollingDigit";
+import { RollingNumber } from "@/components/ui/RollingDigit";
 
 interface FinalResultsPhaseProps {
   rounds: GameRound[];
@@ -13,17 +13,15 @@ interface FinalResultsPhaseProps {
 
 export function FinalResultsPhase({ rounds, onPlayAgain }: FinalResultsPhaseProps) {
   const averageScore = rounds.reduce((sum, r) => sum + (r.score ?? 0), 0) / rounds.length;
-  const scoreStr = averageScore.toFixed(1);
+  const averageStr = averageScore.toFixed(1);
   const [buttonVisible, setButtonVisible] = useState(false);
-  const settledCountRef = useRef(0);
-  const totalDigits = scoreStr.replace(".", "").length;
 
-  const handleSettled = () => {
-    settledCountRef.current += 1;
-    if (settledCountRef.current >= totalDigits) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
       setButtonVisible(true);
-    }
-  };
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [averageStr]);
 
   return (
     <div className="flex flex-col gap-8 w-full">
@@ -31,20 +29,11 @@ export function FinalResultsPhase({ rounds, onPlayAgain }: FinalResultsPhaseProp
         Final Results
       </p>
 
-      <div className="text-7xl font-bold font-mono text-center flex justify-center overflow-hidden">
-        {scoreStr.split("").map((c, i) =>
-          c === "." ? (
-            <span key={i} className="mx-1">.</span>
-          ) : (
-            <RollingDigit
-              key={i}
-              value={c}
-              index={i}
-              onSettled={handleSettled}
-              width="w-8"
-            />
-          ),
-        )}
+      <div className="text-7xl font-bold font-mono text-center flex justify-center">
+        <RollingNumber
+          value={averageStr}
+          isAnimating={true}
+        />
       </div>
 
       <div className="flex gap-4 justify-center mb-6">

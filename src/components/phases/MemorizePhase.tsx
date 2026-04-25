@@ -9,7 +9,7 @@ import { ClockTimer } from "@/components/ui/ClockTimer";
 const ROTATION_COUNT = 4;
 const TARGET_DISPLAY_TIME = 400;
 const MEMORIZE_TIME = 5;
-const COUNTDOWN_INTERVAL = 100;
+const COUNTDOWN_INTERVAL = Math.round(1000 / 60);
 
 export function MemorizePhase({ targetColor, onComplete }: MemorizePhaseProps) {
   const [displayColor, setDisplayColor] = useState("");
@@ -45,7 +45,9 @@ export function MemorizePhase({ targetColor, onComplete }: MemorizePhaseProps) {
       onComplete();
       return;
     }
-    const timer = setTimeout(() => setCountdownMs((c) => c - COUNTDOWN_INTERVAL), COUNTDOWN_INTERVAL);
+    const timer = setTimeout(() => setCountdownMs((c) => {
+      return c - COUNTDOWN_INTERVAL;
+    }), COUNTDOWN_INTERVAL);
     return () => clearTimeout(timer);
   }, [phase, countdownMs, onComplete]);
 

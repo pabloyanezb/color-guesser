@@ -1,24 +1,22 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import type { ResultsPhaseProps } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
-import { RollingDigit } from "../ui/RollingDigit";
+import { RollingNumber } from "@/components/ui/RollingDigit";
 
 export function ResultsPhase({ round, onContinue }: ResultsPhaseProps) {
   const score = round.score ?? 0;
   const scoreStr = score.toFixed(1);
   const [buttonVisible, setButtonVisible] = useState(false);
-  const settledCountRef = useRef(0);
-  const totalDigits = scoreStr.replace(".", "").length;
 
-  const handleSettled = () => {
-    settledCountRef.current += 1;
-    if (settledCountRef.current >= totalDigits) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
       setButtonVisible(true);
-    }
-  };
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [scoreStr]);
 
   return (
     <div className="flex flex-col gap-8 w-full">
@@ -26,19 +24,8 @@ export function ResultsPhase({ round, onContinue }: ResultsPhaseProps) {
         Result
       </p>
 
-      <div className="text-7xl font-bold font-mono text-center flex justify-center overflow-hidden">
-        {scoreStr.split("").map((c, i) =>
-          c === "." ? (
-            <span key={i} className="mx-1">.</span>
-          ) : (
-            <RollingDigit
-              key={i}
-              value={c}
-              index={i}
-              onSettled={handleSettled}
-            />
-          ),
-        )}
+      <div className="text-7xl font-bold font-mono text-center flex justify-center">
+        <RollingNumber value={scoreStr} isAnimating={true} />
       </div>
 
       <div className="flex justify-center">
