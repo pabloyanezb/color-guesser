@@ -15,7 +15,7 @@ export function generateRandomHSL(): HSL {
 
 export function calculateScore(original: string, guess: string): number {
   const delta = chroma.deltaE(original, guess);
-  return Math.max(0, Math.round(100 - delta));
+  return Math.max(0, Number((100 - delta).toFixed(1)));
 }
 
 export function generateRandomColor(): string {
