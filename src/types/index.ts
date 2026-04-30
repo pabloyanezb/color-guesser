@@ -61,5 +61,6 @@ export interface ColorSwatchProps {
   color: string;
   size?: "sm" | "md" | "lg";
   bordered?: boolean;
+  contrastText?: "auto" | "black" | "white";
   children?: React.ReactNode;
 }

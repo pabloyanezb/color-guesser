@@ -70,4 +70,28 @@ describe("ColorSwatch", () => {
     expect(div.className).toContain("items-center");
     expect(div.className).toContain("justify-center");
   });
+
+  it("applies text-white for dark backgrounds", () => {
+    const { container } = render(<ColorSwatch color="#000000" />);
+    const div = container.querySelector("div")!;
+    expect(div.className).toContain("text-white");
+  });
+
+  it("applies text-black for light backgrounds", () => {
+    const { container } = render(<ColorSwatch color="#ffffff" />);
+    const div = container.querySelector("div")!;
+    expect(div.className).toContain("text-black");
+  });
+
+  it("applies text-white when contrastText is set to white", () => {
+    const { container } = render(<ColorSwatch color="#ffffff" contrastText="white" />);
+    const div = container.querySelector("div")!;
+    expect(div.className).toContain("text-white");
+  });
+
+  it("applies text-black when contrastText is set to black", () => {
+    const { container } = render(<ColorSwatch color="#000000" contrastText="black" />);
+    const div = container.querySelector("div")!;
+    expect(div.className).toContain("text-black");
+  });
 });
