@@ -11,7 +11,7 @@ const sizes = {
 function getContrastTextColor(color: string): string {
   const whiteContrast = chroma.contrast(color, "#ffffff");
   const blackContrast = chroma.contrast(color, "#000000");
-  return whiteContrast > blackContrast ? "text-white" : "text-black";
+  return whiteContrast > blackContrast ? "text-zinc-200" : "text-black";
 }
 
 export function ColorSwatch({

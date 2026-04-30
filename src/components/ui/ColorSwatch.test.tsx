@@ -71,10 +71,10 @@ describe("ColorSwatch", () => {
     expect(div.className).toContain("justify-center");
   });
 
-  it("applies text-white for dark backgrounds", () => {
+  it("applies text-zinc-200 for dark backgrounds", () => {
     const { container } = render(<ColorSwatch color="#000000" />);
     const div = container.querySelector("div")!;
-    expect(div.className).toContain("text-white");
+    expect(div.className).toContain("text-zinc-200");
   });
 
   it("applies text-black for light backgrounds", () => {
