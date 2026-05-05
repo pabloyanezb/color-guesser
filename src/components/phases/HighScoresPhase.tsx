@@ -4,12 +4,11 @@ import { Button } from "@/components/ui/Button";
 import { useHighScoresStore } from "@/store/highscoresStore";
 
 interface HighScoresPhaseProps {
-  onBack?: () => void;
-  backLabel?: string;
-  onPlayAgain: () => void;
+  buttonLabel?: string;
+  onButtonClick?: () => void;
 }
 
-export function HighScoresPhase({ onBack, backLabel = "Back", onPlayAgain }: HighScoresPhaseProps) {
+export function HighScoresPhase({ buttonLabel, onButtonClick }: HighScoresPhaseProps) {
   const activePlayerName = useHighScoresStore((state) => state.activePlayerName);
   const getTopFiveForPlayer = useHighScoresStore((state) => state.getTopFiveForPlayer);
 
@@ -42,25 +41,17 @@ export function HighScoresPhase({ onBack, backLabel = "Back", onPlayAgain }: Hig
         )}
       </div>
 
-      <div className="flex gap-2">
-        {onBack ? (
+      {buttonLabel && onButtonClick && (
+        <div className="flex gap-2">
           <Button
-            onClick={onBack}
+            onClick={onButtonClick}
             variant="primary"
             fullWidth
           >
-            {backLabel}
+            {buttonLabel}
           </Button>
-        ) :
-          <Button
-            onClick={onPlayAgain}
-            variant="brand"
-            fullWidth
-          >
-            Play Again
-          </Button>
-        }
-      </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -13,6 +13,7 @@ import { useHighScoresStore } from "@/store/highscoresStore";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>("start");
+  const [highscoresOrigin, setHighscoresOrigin] = useState<"start" | "final">("start");
   const [rounds, setRounds] = useState<GameRound[]>([]);
   const [currentRound, setCurrentRound] = useState(0);
   const [guess, setGuess] = useState<HSL>({ h: 180, s: 50, l: 50 });
@@ -70,7 +71,8 @@ export default function Home() {
     setPhase("start");
   }, []);
 
-  const handleViewTopScores = useCallback(() => {
+  const handleViewTopScores = useCallback((from: "start" | "final" = "final") => {
+    setHighscoresOrigin(from);
     setAnimKey((k) => k + 1);
     setPhase("highscores");
   }, []);
@@ -125,8 +127,8 @@ export default function Home() {
         )}
         {phase === "highscores" && (
           <HighScoresPhase
-            onBack={() => setPhase("final")}
-            onPlayAgain={handlePlayAgain}
+            buttonLabel={highscoresOrigin === "start" ? "Return" : "Play Again"}
+            onButtonClick={handlePlayAgain}
           />
         )}
       </div>
