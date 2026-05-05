@@ -16,12 +16,14 @@ interface FinalResultsPhaseProps {
   rounds: GameRound[];
   onPlayAgain: () => void;
   onSaveScore?: (playerTag: PlayerTag, finalScore: number, roundScores: number[]) => void;
+  onViewTopScores?: () => void;
 }
 
 export function FinalResultsPhase({
   rounds,
   onPlayAgain,
   onSaveScore,
+  onViewTopScores,
 }: FinalResultsPhaseProps) {
   const averageScore = rounds.reduce((sum, round) => sum + (round.score ?? 0), 0) / rounds.length;
   const roundScores = rounds.map((round) => round.score ?? 0);
@@ -29,6 +31,7 @@ export function FinalResultsPhase({
   const [buttonVisible, setButtonVisible] = useState(false);
   const [playerTag, setPlayerTag] = useState("");
   const [hasDecidedSave, setHasDecidedSave] = useState(false);
+  const [savedScore, setSavedScore] = useState(false);
   const [showTagError, setShowTagError] = useState(false);
 
   const isTagValid = PLAYER_TAG_REGEX.test(playerTag);
@@ -127,7 +130,9 @@ export function FinalResultsPhase({
                   }
                   onSaveScore?.(playerTag, averageScore, roundScores);
                   setShowTagError(false);
+                  setSavedScore(true);
                   setHasDecidedSave(true);
+                  onViewTopScores?.();
                 }}
                 variant="primary"
                 size="sm"
@@ -138,6 +143,7 @@ export function FinalResultsPhase({
               <Button
                 onClick={() => {
                   setShowTagError(false);
+                  setSavedScore(false);
                   setHasDecidedSave(true);
                 }}
                 variant="primary"
@@ -149,14 +155,16 @@ export function FinalResultsPhase({
             </div>
           </div>
         )}
-        {buttonVisible && hasDecidedSave && (
-          <Button
-            onClick={onPlayAgain}
-            variant="brand"
-            fullWidth
-          >
-            <span className="fade-in-delay">Play Again</span>
-          </Button>
+        {buttonVisible && hasDecidedSave && !savedScore && (
+          <div className="flex gap-2">
+            <Button
+              onClick={onPlayAgain}
+              variant="brand"
+              fullWidth
+            >
+              <span className="fade-in-delay">Play Again</span>
+            </Button>
+          </div>
         )}
       </div>
     </div>

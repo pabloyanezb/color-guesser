@@ -8,6 +8,7 @@ import { MemorizePhase } from "@/components/phases/MemorizePhase";
 import { GuessPhase } from "@/components/phases/GuessPhase";
 import { ResultsPhase } from "@/components/phases/ResultsPhase";
 import { FinalResultsPhase } from "@/components/phases/FinalResultsPhase";
+import { HighScoresPhase } from "@/components/phases/HighScoresPhase";
 import { useHighScoresStore } from "@/store/highscoresStore";
 
 export default function Home() {
@@ -69,6 +70,11 @@ export default function Home() {
     setPhase("start");
   }, []);
 
+  const handleViewTopScores = useCallback(() => {
+    setAnimKey((k) => k + 1);
+    setPhase("highscores");
+  }, []);
+
   const handleSaveScore = useCallback((
     playerTag: string,
     finalScore: number,
@@ -114,6 +120,13 @@ export default function Home() {
             rounds={rounds}
             onPlayAgain={handlePlayAgain}
             onSaveScore={handleSaveScore}
+            onViewTopScores={handleViewTopScores}
+          />
+        )}
+        {phase === "highscores" && (
+          <HighScoresPhase
+            onBack={() => setPhase("final")}
+            onPlayAgain={handlePlayAgain}
           />
         )}
       </div>

@@ -1,4 +1,4 @@
-export type Phase = "start" | "memorize" | "guess" | "results" | "final";
+export type Phase = "start" | "memorize" | "guess" | "results" | "final" | "highscores";
 
 export interface HSL {
   h: number;
