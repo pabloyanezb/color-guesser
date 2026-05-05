@@ -26,6 +26,8 @@ export interface GameRound {
   score?: number;
 }
 
+export type PlayerTag = string;
+
 export interface GameState {
   rounds: GameRound[];
   currentRound: number;
