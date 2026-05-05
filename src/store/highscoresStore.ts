@@ -59,8 +59,9 @@ export const useHighScoresStore = create<HighScoresState>()(
         }
 
         const now = new Date().toISOString();
+        const id = `${playerName}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
         const nextEntry: HighScoreEntry = {
-          id: `${playerName}-${now}`,
+          id,
           playerName,
           finalScore: Number(input.finalScore.toFixed(1)),
           roundScores: input.roundScores,
