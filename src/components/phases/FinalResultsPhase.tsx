@@ -59,7 +59,7 @@ export function FinalResultsPhase({
         />
       </div>
 
-      <div className="flex gap-4 justify-center mb-6">
+      <div className="flex flex-wrap gap-4 justify-center mb-6">
         {rounds.map((round, index) => (
           <div key={index} className="flex flex-col items-center gap-2">
             <span className="text-lg font-bold">{index + 1}/3 - {round.score}</span>
@@ -86,7 +86,7 @@ export function FinalResultsPhase({
       <div className="h-11">
         {buttonVisible && !hasDecidedSave && (
           <div className="flex flex-col items-center gap-6 mb-3">
-            <div className="w-75">
+            <div className="w-full max-w-sm mx-auto">
               <p className="block text-sm font-bold uppercase tracking-wider mb-2">
                 Save your score?
               </p>
@@ -104,10 +104,12 @@ export function FinalResultsPhase({
                     setShowTagError(false);
                   }
                 }}
-                placeholder="Your player name"
-                className={`w-full border-4 bg-white text-black px-3 py-2 font-bold uppercase tracking-wider ${showTagError ? "border-red-600" : "border-black"}`}
+                placeholder="NAME"
+                className={`w-full bg-white text-black text-center text-3xl font-black uppercase tracking-[0.55em] pl-[0.55em] border-0 border-b-4 outline-none focus:border-black py-2 ${showTagError ? "border-red-600" : "border-black"}`}
                 minLength={PLAYER_TAG_MIN_LENGTH}
                 maxLength={PLAYER_TAG_MAX_LENGTH}
+                autoComplete="off"
+                aria-label="Player name"
               />
               {showTagError && (
                 <p className="mt-1 text-xs font-bold uppercase tracking-wider text-red-700">
@@ -115,7 +117,7 @@ export function FinalResultsPhase({
                 </p>
               )}
             </div>
-            <div className="flex justify-center gap-2">
+            <div className="flex justify-center gap-6">
               <Button
                 onClick={() => {
                   if (!isTagValid) {
@@ -127,8 +129,8 @@ export function FinalResultsPhase({
                   setHasDecidedSave(true);
                 }}
                 variant="primary"
+                size="sm"
                 disabled={hasDecidedSave}
-                className="px-4 py-2 text-3xl leading-none min-w-16"
               >
                 ✓
               </Button>
@@ -138,8 +140,8 @@ export function FinalResultsPhase({
                   setHasDecidedSave(true);
                 }}
                 variant="primary"
+                size="sm"
                 disabled={hasDecidedSave}
-                className="px-4 py-2 text-3xl leading-none min-w-16"
               >
                 ✕
               </Button>
