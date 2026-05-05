@@ -1,4 +1,4 @@
-export type Phase = "start" | "memorize" | "guess" | "results" | "final";
+export type Phase = "start" | "memorize" | "guess" | "results" | "final" | "highscores";
 
 export interface HSL {
   h: number;
@@ -25,6 +25,8 @@ export interface GameRound {
   guessColor?: string;
   score?: number;
 }
+
+export type PlayerTag = string;
 
 export interface GameState {
   rounds: GameRound[];

@@ -8,13 +8,17 @@ import { MemorizePhase } from "@/components/phases/MemorizePhase";
 import { GuessPhase } from "@/components/phases/GuessPhase";
 import { ResultsPhase } from "@/components/phases/ResultsPhase";
 import { FinalResultsPhase } from "@/components/phases/FinalResultsPhase";
+import { HighScoresPhase } from "@/components/phases/HighScoresPhase";
+import { useHighScoresStore } from "@/store/highscoresStore";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>("start");
+  const [highscoresOrigin, setHighscoresOrigin] = useState<"start" | "final">("start");
   const [rounds, setRounds] = useState<GameRound[]>([]);
   const [currentRound, setCurrentRound] = useState(0);
   const [guess, setGuess] = useState<HSL>({ h: 180, s: 50, l: 50 });
   const [animKey, setAnimKey] = useState(0);
+  const addHighScore = useHighScoresStore((state) => state.addHighScore);
 
   const startGame = useCallback(() => {
     const newRounds: GameRound[] = [
@@ -67,6 +71,24 @@ export default function Home() {
     setPhase("start");
   }, []);
 
+  const handleViewTopScores = useCallback((from: "start" | "final" = "final") => {
+    setHighscoresOrigin(from);
+    setAnimKey((k) => k + 1);
+    setPhase("highscores");
+  }, []);
+
+  const handleSaveScore = useCallback((
+    playerTag: string,
+    finalScore: number,
+    roundScores: number[],
+  ) => {
+    addHighScore({
+      playerName: playerTag,
+      finalScore,
+      roundScores,
+    });
+  }, [addHighScore]);
+
   const currentRoundData = rounds[currentRound];
 
   return (
@@ -99,6 +121,14 @@ export default function Home() {
           <FinalResultsPhase
             rounds={rounds}
             onPlayAgain={handlePlayAgain}
+            onSaveScore={handleSaveScore}
+            onViewTopScores={handleViewTopScores}
+          />
+        )}
+        {phase === "highscores" && (
+          <HighScoresPhase
+            buttonLabel={highscoresOrigin === "start" ? "Return" : "Play Again"}
+            onButtonClick={handlePlayAgain}
           />
         )}
       </div>
