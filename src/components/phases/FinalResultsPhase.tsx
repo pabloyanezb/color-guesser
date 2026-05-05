@@ -5,6 +5,7 @@ import type { GameRound, PlayerTag } from "@/types";
 import { Button } from "@/components/ui/Button";
 import { ColorSwatch } from "@/components/ui/ColorSwatch";
 import { RollingNumber } from "@/components/ui/RollingNumber";
+import clsx from "clsx";
 
 const ROLLING_DURATION = 1000;
 const SCORE_CHANGE_DELAY = 300;
@@ -109,7 +110,15 @@ export function FinalResultsPhase({
                   }
                 }}
                 placeholder="NAME"
-                className={`w-full bg-white text-black text-center text-3xl font-black uppercase tracking-[0.55em] pl-[0.55em] border-0 border-b-4 outline-none focus:border-black py-2 ${showTagError ? "border-red-600" : "border-black"}`}
+                className={clsx(
+                  "w-full bg-white text-black text-center text-3xl font-black",
+                  "uppercase tracking-[0.55em] pl-[0.55em]",
+                  "border-0 border-b-4 outline-none focus:border-black py-2",
+                  {
+                    "border-red-700": showTagError,
+                    "border-black": !showTagError,
+                  },
+                )}
                 minLength={PLAYER_TAG_MIN_LENGTH}
                 maxLength={PLAYER_TAG_MAX_LENGTH}
                 autoComplete="off"
