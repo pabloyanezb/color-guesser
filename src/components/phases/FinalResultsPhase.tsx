@@ -15,7 +15,7 @@ const PLAYER_TAG_REGEX = /^[A-Z0-9]{3,4}$/;
 interface FinalResultsPhaseProps {
   rounds: GameRound[];
   onPlayAgain: () => void;
-  onSaveScore?: (playerTag: PlayerTag) => void;
+  onSaveScore?: (playerTag: PlayerTag, finalScore: number, roundScores: number[]) => void;
 }
 
 export function FinalResultsPhase({
@@ -23,7 +23,8 @@ export function FinalResultsPhase({
   onPlayAgain,
   onSaveScore,
 }: FinalResultsPhaseProps) {
-  const averageScore = rounds.reduce((sum, r) => sum + (r.score ?? 0), 0) / rounds.length;
+  const averageScore = rounds.reduce((sum, round) => sum + (round.score ?? 0), 0) / rounds.length;
+  const roundScores = rounds.map((round) => round.score ?? 0);
   const [scoreStr, setScoreStr] = useState("00.0");
   const [buttonVisible, setButtonVisible] = useState(false);
   const [playerTag, setPlayerTag] = useState("");
@@ -124,7 +125,7 @@ export function FinalResultsPhase({
                     setShowTagError(true);
                     return;
                   }
-                  onSaveScore?.(playerTag);
+                  onSaveScore?.(playerTag, averageScore, roundScores);
                   setShowTagError(false);
                   setHasDecidedSave(true);
                 }}
