@@ -4,6 +4,7 @@ interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
   variant?: "primary" | "brand" | "info" | "success" | "warning";
+  size?: "default" | "sm";
   fullWidth?: boolean;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
@@ -42,12 +43,16 @@ export function Button({
   children,
   onClick,
   variant = "primary",
+  size = "default",
   fullWidth = false,
   disabled = false,
   type = "button",
   className,
 }: ButtonProps) {
   const v = variants[variant];
+  const sizeClass = size === "sm"
+    ? "py-2 px-4 text-base"
+    : "py-4 px-8 text-2xl";
 
   return (
     <button
@@ -58,7 +63,8 @@ export function Button({
         v.bg,
         v.text,
         !disabled && v.hover,
-        "uppercase font-bold border-4 border-black py-4 px-8 text-2xl",
+        "uppercase font-bold border-4 border-black",
+        sizeClass,
         "cursor-pointer transition-colors",
         fullWidth && "w-full",
         disabled && "opacity-50 cursor-not-allowed pointer-events-none",
