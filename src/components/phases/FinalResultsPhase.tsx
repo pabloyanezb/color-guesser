@@ -67,7 +67,7 @@ export function FinalResultsPhase({
       <div className="flex flex-wrap gap-4 justify-center mb-6">
         {rounds.map((round, index) => (
           <div key={index} className="flex flex-col items-center gap-2">
-            <span className="text-lg font-bold">{index + 1}/3 - {round.score}</span>
+            <span className="text-lg font-bold">{index + 1}/3 - {round.score?.toFixed(1) ?? "0.0"}</span>
             <ColorSwatch
               color={round.targetColor}
               size="md"
