@@ -17,14 +17,12 @@ interface FinalResultsPhaseProps {
   rounds: GameRound[];
   onPlayAgain: () => void;
   onSaveScore?: (playerTag: PlayerTag, finalScore: number, roundScores: number[]) => void;
-  onViewTopScores?: () => void;
 }
 
 export function FinalResultsPhase({
   rounds,
   onPlayAgain,
   onSaveScore,
-  onViewTopScores,
 }: FinalResultsPhaseProps) {
   const averageScore = rounds.reduce((sum, round) => sum + (round.score ?? 0), 0) / rounds.length;
   const roundScores = rounds.map((round) => round.score ?? 0);
@@ -141,7 +139,6 @@ export function FinalResultsPhase({
                   setShowTagError(false);
                   setSavedScore(true);
                   setHasDecidedSave(true);
-                  onViewTopScores?.();
                 }}
                 variant="primary"
                 size="sm"

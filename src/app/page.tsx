@@ -87,7 +87,8 @@ export default function Home() {
       finalScore,
       roundScores,
     });
-  }, [addHighScore]);
+    handleViewTopScores("final");
+  }, [addHighScore, handleViewTopScores]);
 
   const currentRoundData = rounds[currentRound];
 
@@ -122,7 +123,6 @@ export default function Home() {
             rounds={rounds}
             onPlayAgain={handlePlayAgain}
             onSaveScore={handleSaveScore}
-            onViewTopScores={handleViewTopScores}
           />
         )}
         {phase === "highscores" && (
