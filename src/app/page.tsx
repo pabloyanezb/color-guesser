@@ -56,7 +56,7 @@ export default function Home() {
   }, [guess, rounds, currentRound]);
 
   const handleContinue = useCallback(() => {
-    if (currentRound < 2) {
+    if (currentRound < rounds.length - 1) {
       setCurrentRound((r) => r + 1);
       setGuess({ h: 180, s: 50, l: 50 });
       setAnimKey((k) => k + 1);
@@ -65,7 +65,7 @@ export default function Home() {
       setAnimKey((k) => k + 1);
       setPhase("final");
     }
-  }, [currentRound]);
+  }, [currentRound, rounds]);
 
   const handlePlayAgain = useCallback(() => {
     setPhase("start");

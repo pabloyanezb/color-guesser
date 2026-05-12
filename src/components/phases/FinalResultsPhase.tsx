@@ -33,8 +33,6 @@ export function FinalResultsPhase({
   const [savedScore, setSavedScore] = useState(false);
   const [showTagError, setShowTagError] = useState(false);
 
-  const isTagValid = PLAYER_TAG_REGEX.test(playerTag);
-
   useEffect(() => {
     const scoreTimer = setTimeout(() => {
       setScoreStr(averageScore.toFixed(1));
@@ -131,6 +129,7 @@ export function FinalResultsPhase({
             <div className="flex justify-center gap-6">
               <Button
                 onClick={() => {
+                  const isTagValid = PLAYER_TAG_REGEX.test(playerTag);
                   if (!isTagValid) {
                     setShowTagError(true);
                     return;
