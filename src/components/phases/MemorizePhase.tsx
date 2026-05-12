@@ -40,7 +40,7 @@ export function MemorizePhase({ targetColor, onComplete }: MemorizePhaseProps) {
   }, [targetColor, phase]);
 
   useEffect(() => {
-    if (phase !== "countdown") return;
+    if (phase !== "countdown" || countdownMs <= 0) return;
     const timer = setTimeout(() => setCountdownMs((c) => {
       return c - COUNTDOWN_INTERVAL;
     }), COUNTDOWN_INTERVAL);
