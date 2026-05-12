@@ -1,4 +1,4 @@
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act, fireEvent } from "@testing-library/react";
 import { ResultsPhase } from "./ResultsPhase";
 
 describe("ResultsPhase", () => {
@@ -42,6 +42,23 @@ describe("ResultsPhase", () => {
       jest.advanceTimersByTime(1300);
     });
     expect(screen.getByText("Continue")).toBeInTheDocument();
+    jest.useRealTimers();
+  });
+
+  it("calls onContinue when Continue button is clicked", () => {
+    const onContinue = jest.fn();
+    jest.useFakeTimers();
+    render(
+      <ResultsPhase
+        round={mockRound}
+        onContinue={onContinue}
+      />,
+    );
+    act(() => {
+      jest.advanceTimersByTime(1300);
+    });
+    fireEvent.click(screen.getByText("Continue"));
+    expect(onContinue).toHaveBeenCalledTimes(1);
     jest.useRealTimers();
   });
 });
