@@ -28,13 +28,12 @@ export default function Home() {
     ];
     setRounds(newRounds);
     setCurrentRound(0);
-    setGuess({ h: 180, s: 50, l: 50 });
     setAnimKey((k) => k + 1);
     setPhase("memorize");
   }, []);
 
   const goToGuess = useCallback(() => {
-    setGuess({ h: 180, s: 50, l: 50 });
+    setGuess({ h: Math.floor(Math.random() * 361), s: 50, l: 50 });
     setAnimKey((k) => k + 1);
     setPhase("guess");
   }, []);
@@ -58,7 +57,6 @@ export default function Home() {
   const handleContinue = useCallback(() => {
     if (currentRound < rounds.length - 1) {
       setCurrentRound((r) => r + 1);
-      setGuess({ h: 180, s: 50, l: 50 });
       setAnimKey((k) => k + 1);
       setPhase("memorize");
     } else {
