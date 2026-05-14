@@ -99,6 +99,35 @@ describe("FinalResultsPhase", () => {
     expect(onSaveScore).toHaveBeenCalledWith("PAB", avgScore, [85.5, 70.3, 90.1]);
   });
 
+  it("prefills player tag when initialPlayerTag is provided", () => {
+    render(
+      <FinalResultsPhase
+        rounds={mockRounds}
+        onPlayAgain={jest.fn()}
+        onSaveScore={jest.fn()}
+        initialPlayerTag="pab"
+      />,
+    );
+    advanceDelay();
+    expect(screen.getByRole("textbox")).toHaveValue("PAB");
+  });
+
+  it("saves with prefilled player tag without editing", () => {
+    const onSaveScore = jest.fn();
+    render(
+      <FinalResultsPhase
+        rounds={mockRounds}
+        onPlayAgain={jest.fn()}
+        onSaveScore={onSaveScore}
+        initialPlayerTag="PAB"
+      />,
+    );
+    advanceDelay();
+    fireEvent.click(screen.getByText("✓"));
+    const avgScore = (85.5 + 70.3 + 90.1) / 3;
+    expect(onSaveScore).toHaveBeenCalledWith("PAB", avgScore, [85.5, 70.3, 90.1]);
+  });
+
   it("shows Play Again after X button is clicked", () => {
     render(
       <FinalResultsPhase

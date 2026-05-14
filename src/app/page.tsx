@@ -18,6 +18,7 @@ export default function Home() {
   const [currentRound, setCurrentRound] = useState(0);
   const [guess, setGuess] = useState<HSL>({ h: 180, s: 50, l: 50 });
   const [animKey, setAnimKey] = useState(0);
+  const activePlayerName = useHighScoresStore((state) => state.activePlayerName);
   const addHighScore = useHighScoresStore((state) => state.addHighScore);
 
   const startGame = useCallback(() => {
@@ -121,6 +122,7 @@ export default function Home() {
             rounds={rounds}
             onPlayAgain={handlePlayAgain}
             onSaveScore={handleSaveScore}
+            initialPlayerTag={activePlayerName}
           />
         )}
         {phase === "highscores" && (
