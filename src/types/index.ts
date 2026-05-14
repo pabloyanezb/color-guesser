@@ -35,6 +35,8 @@ export interface GameState {
 
 export interface StartPhaseProps {
   onStart: () => void;
+  activePlayerName?: string;
+  onChangePlayerName?: (name: string) => void;
 }
 
 export interface MemorizePhaseProps {

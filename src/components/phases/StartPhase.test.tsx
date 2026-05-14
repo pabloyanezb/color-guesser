@@ -32,4 +32,55 @@ describe("StartPhase", () => {
     expect(div.className).toContain("flex-col");
     expect(div.className).toContain("gap-8");
   });
+
+  it("shows current player tag when provided", () => {
+    render(<StartPhase onStart={jest.fn()} activePlayerName="PAB" />);
+    expect(screen.getByText("Player: PAB")).toBeInTheDocument();
+  });
+
+  it("allows editing and saving player tag", () => {
+    const onChangePlayerName = jest.fn();
+    render(
+      <StartPhase
+        onStart={jest.fn()}
+        activePlayerName="PAB"
+        onChangePlayerName={onChangePlayerName}
+      />,
+    );
+
+    fireEvent.click(screen.getByText("Player: PAB"));
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "xyz1" } });
+    fireEvent.click(screen.getByText("✓"));
+
+    expect(onChangePlayerName).toHaveBeenCalledWith("XYZ1");
+  });
+
+  it("shows error when saving short tag", () => {
+    render(
+      <StartPhase
+        onStart={jest.fn()}
+        activePlayerName="PAB"
+        onChangePlayerName={jest.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getByText("Player: PAB"));
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "AB" } });
+    fireEvent.click(screen.getByText("✓"));
+
+    expect(screen.getByText("Name required (3-4 letters or numbers)")).toBeInTheDocument();
+  });
+
+  it("prefills input with current player name", () => {
+    render(
+      <StartPhase
+        onStart={jest.fn()}
+        activePlayerName="PAB"
+        onChangePlayerName={jest.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getByText("Player: PAB"));
+    expect(screen.getByRole("textbox")).toHaveValue("PAB");
+  });
 });

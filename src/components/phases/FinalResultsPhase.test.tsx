@@ -105,7 +105,7 @@ describe("FinalResultsPhase", () => {
         rounds={mockRounds}
         onPlayAgain={jest.fn()}
         onSaveScore={jest.fn()}
-        initialPlayerTag="pab"
+        initialPlayerTag="PAB"
       />,
     );
     advanceDelay();
