@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { StartPhaseProps } from "@/types";
 import { Button } from "@/components/ui/Button";
 
@@ -13,6 +13,15 @@ export function StartPhase({
   const [isEditingName, setIsEditingName] = useState(false);
   const [playerTag, setPlayerTag] = useState(activePlayerName);
   const [showTagError, setShowTagError] = useState(false);
+  const canConfirm = playerTag.length >= PLAYER_TAG_MIN_LENGTH;
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isEditingName) {
+      inputRef.current?.focus();
+      inputRef.current?.setSelectionRange(playerTag.length, playerTag.length);
+    }
+  }, [isEditingName, playerTag]);
 
   const handleStartEditing = () => {
     setPlayerTag(activePlayerName);
@@ -37,69 +46,76 @@ export function StartPhase({
           PLAY
         </Button>
       </div>
-      <div className="fade-in flex flex-col gap-2">
-        {!isEditingName && (
-          <div className="text-end py-2">
+      <form
+        className="fade-in flex flex-col gap-2 items-end"
+        noValidate
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (!isEditingName) {
+            return;
+          }
+          if (playerTag.length < PLAYER_TAG_MIN_LENGTH) {
+            setShowTagError(true);
+            return;
+          }
+          onChangePlayerName?.(playerTag);
+          setIsEditingName(false);
+        }}
+      >
+        <div className="flex items-center whitespace-pre-wrap transition-all duration-200 ease-out">
+          <span className="text-md font-bold uppercase tracking-widest underline underline-offset-4 py-2">Player: </span>
+
+          <div className="relative w-12">
             <button
               type="button"
               onClick={handleStartEditing}
-              className="cursor-pointer text-md font-bold uppercase tracking-widest underline underline-offset-4"
+              className={`absolute inset-0 text-left text-md font-bold uppercase tracking-widest underline underline-offset-4 transition-all duration-200 ease-out ${isEditingName ? "opacity-0 -translate-x-1 pointer-events-none" : "opacity-100 translate-x-0"}`}
             >
-              Player: {activePlayerName || "Set Name"}
+              {activePlayerName || "Set Name"}
             </button>
+
+            <input
+              ref={inputRef}
+              type="text"
+              value={playerTag}
+              onChange={(event) => {
+                const nextTag = event.target.value
+                  .toUpperCase()
+                  .replace(/[^A-Z0-9]/g, "")
+                  .slice(0, PLAYER_TAG_MAX_LENGTH);
+                setPlayerTag(nextTag);
+                if (nextTag.length >= PLAYER_TAG_MIN_LENGTH) {
+                  setShowTagError(false);
+                }
+              }}
+              placeholder="NAME"
+              className={`bg-transparent text-md font-bold uppercase tracking-widest outline-none underline underline-offset-4 w-full transition-all duration-200 ease-out ${isEditingName ? "opacity-100 translate-x-0" : "opacity-0 translate-x-1 pointer-events-none"}`}
+              maxLength={PLAYER_TAG_MAX_LENGTH}
+              autoComplete="off"
+              aria-label="Player name"
+            />
           </div>
-        )}
-        {isEditingName && (
-          <form
-            className="flex flex-col gap-2 items-end"
-            onSubmit={() => {
-              if (playerTag.length < PLAYER_TAG_MIN_LENGTH) {
-                setShowTagError(true);
-                return;
-              }
-              onChangePlayerName?.(playerTag);
-              setIsEditingName(false);
-            }}
+
+          <div
+            className={`ml-2 overflow-hidden transition-all duration-200 ease-out ${isEditingName && canConfirm ? "w-7 opacity-100 translate-x-0" : "w-0 opacity-0 translate-x-2"}`}
           >
-            <div className="flex items-center underline underline-offset-4 whitespace-pre-wrap">
-              <span className="text-md font-bold uppercase tracking-widest py-2">Player: </span>
-              <input
-                type="text"
-                value={playerTag}
-                onChange={(event) => {
-                  const nextTag = event.target.value
-                    .toUpperCase()
-                    .replace(/[^A-Z0-9]/g, "")
-                    .slice(0, PLAYER_TAG_MAX_LENGTH);
-                  setPlayerTag(nextTag);
-                  if (nextTag.length >= PLAYER_TAG_MIN_LENGTH) {
-                    setShowTagError(false);
-                  }
-                }}
-                placeholder="NAME"
-                className="bg-transparent text-md font-bold uppercase tracking-widest outline-none w-14"
-                minLength={PLAYER_TAG_MIN_LENGTH}
-                maxLength={PLAYER_TAG_MAX_LENGTH}
-                autoComplete="off"
-                aria-label="Player name"
-                autoFocus
-              />
-              <Button
-                size="xs"
-                variant="primary"
-                type="submit"
-              >
-                ✓
-              </Button>
-            </div>
-            {showTagError && (
-              <p className="text-xs font-bold uppercase tracking-wider text-red-700">
-                Name required (3-4 letters or numbers)
-              </p>
-            )}
-          </form>
-        )}
-      </div>
+            <Button
+              size="xs"
+              variant="primary"
+              type="submit"
+              className={isEditingName && canConfirm ? "" : "pointer-events-none"}
+            >
+              ✓
+            </Button>
+          </div>
+        </div>
+
+        <p
+          className={`text-xs font-bold uppercase tracking-wider text-red-700 transition-all duration-200 ease-out ${showTagError ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1 h-0 overflow-hidden"}`}
+        >
+          Name required (3-4 letters or numbers)
+        </p>
+      </form>
     </div>
   );
 }

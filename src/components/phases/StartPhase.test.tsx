@@ -35,7 +35,8 @@ describe("StartPhase", () => {
 
   it("shows current player tag when provided", () => {
     render(<StartPhase onStart={jest.fn()} activePlayerName="PAB" />);
-    expect(screen.getByText("Player: PAB")).toBeInTheDocument();
+    expect(screen.getByText("Player:")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "PAB" })).toBeInTheDocument();
   });
 
   it("allows editing and saving player tag", () => {
@@ -48,7 +49,7 @@ describe("StartPhase", () => {
       />,
     );
 
-    fireEvent.click(screen.getByText("Player: PAB"));
+    fireEvent.click(screen.getByRole("button", { name: "PAB" }));
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "xyz1" } });
     fireEvent.click(screen.getByText("✓"));
 
@@ -64,9 +65,10 @@ describe("StartPhase", () => {
       />,
     );
 
-    fireEvent.click(screen.getByText("Player: PAB"));
+    fireEvent.click(screen.getByRole("button", { name: "PAB" }));
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "AB" } });
-    fireEvent.click(screen.getByText("✓"));
+    expect(screen.getByText("✓")).toBeInTheDocument();
+    fireEvent.submit(screen.getByRole("textbox").closest("form") as HTMLFormElement);
 
     expect(screen.getByText("Name required (3-4 letters or numbers)")).toBeInTheDocument();
   });
@@ -80,7 +82,7 @@ describe("StartPhase", () => {
       />,
     );
 
-    fireEvent.click(screen.getByText("Player: PAB"));
+    fireEvent.click(screen.getByRole("button", { name: "PAB" }));
     expect(screen.getByRole("textbox")).toHaveValue("PAB");
   });
 });
