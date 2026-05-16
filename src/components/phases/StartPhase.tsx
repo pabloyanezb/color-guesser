@@ -48,7 +48,7 @@ export function StartPhase({
         </Button>
       </div>
       <form
-        className="fade-in flex flex-col gap-2 items-end"
+        className="fade-in flex flex-col items-end"
         noValidate
         onSubmit={(event) => {
           event.preventDefault();
@@ -112,10 +112,10 @@ export function StartPhase({
 
           <div
             className={clsx(
-              "ml-2 overflow-hidden transition-all duration-200 ease-out",
+              "overflow-hidden transition-all duration-200 ease-out",
               isEditingName && canConfirm
-                ? "w-7 opacity-100 translate-x-0"
-                : "w-0 opacity-0 translate-x-2",
+                ? "ml-2 w-7 opacity-100 translate-x-0"
+                : "ml-0 w-0 opacity-0 translate-x-2",
             )}
           >
             <Button
