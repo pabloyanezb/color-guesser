@@ -1,3 +1,4 @@
+import { clsx } from "clsx";
 import { useEffect, useRef, useState } from "react";
 import type { StartPhaseProps } from "@/types";
 import { Button } from "@/components/ui/Button";
@@ -69,7 +70,13 @@ export function StartPhase({
             <button
               type="button"
               onClick={handleStartEditing}
-              className={`absolute inset-0 text-left text-md font-bold uppercase tracking-widest underline underline-offset-4 transition-all duration-200 ease-out ${isEditingName ? "opacity-0 -translate-x-1 pointer-events-none" : "opacity-100 translate-x-0"}`}
+              className={clsx(
+                "absolute inset-0 text-left text-md font-bold uppercase tracking-widest",
+                "underline underline-offset-4 transition-all duration-200 ease-out",
+                isEditingName
+                  ? "opacity-0 -translate-x-1 pointer-events-none"
+                  : "opacity-100 translate-x-0",
+              )}
             >
               {activePlayerName || "Set Name"}
             </button>
@@ -89,7 +96,14 @@ export function StartPhase({
                 }
               }}
               placeholder="NAME"
-              className={`bg-transparent text-md font-bold uppercase tracking-widest outline-none underline underline-offset-4 w-full transition-all duration-200 ease-out ${isEditingName ? "opacity-100 translate-x-0" : "opacity-0 translate-x-1 pointer-events-none"}`}
+              className={clsx(
+                "bg-transparent text-md font-bold uppercase tracking-widest",
+                "outline-none underline underline-offset-4 w-full",
+                "transition-all duration-200 ease-out",
+                isEditingName
+                  ? "opacity-100 translate-x-0"
+                  : "opacity-0 translate-x-1 pointer-events-none",
+              )}
               maxLength={PLAYER_TAG_MAX_LENGTH}
               autoComplete="off"
               aria-label="Player name"
@@ -97,7 +111,12 @@ export function StartPhase({
           </div>
 
           <div
-            className={`ml-2 overflow-hidden transition-all duration-200 ease-out ${isEditingName && canConfirm ? "w-7 opacity-100 translate-x-0" : "w-0 opacity-0 translate-x-2"}`}
+            className={clsx(
+              "ml-2 overflow-hidden transition-all duration-200 ease-out",
+              isEditingName && canConfirm
+                ? "w-7 opacity-100 translate-x-0"
+                : "w-0 opacity-0 translate-x-2",
+            )}
           >
             <Button
               size="xs"
@@ -111,7 +130,13 @@ export function StartPhase({
         </div>
 
         <p
-          className={`text-xs font-bold uppercase tracking-wider text-red-700 transition-all duration-200 ease-out ${showTagError ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1 h-0 overflow-hidden"}`}
+          className={clsx(
+            "text-xs font-bold uppercase tracking-wider text-red-700",
+            "transition-all duration-200 ease-out",
+            showTagError
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 -translate-y-1 h-0 overflow-hidden",
+          )}
         >
           Name required (3-4 letters or numbers)
         </p>
