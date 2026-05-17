@@ -17,18 +17,20 @@ interface FinalResultsPhaseProps {
   rounds: GameRound[];
   onPlayAgain: () => void;
   onSaveScore?: (playerTag: PlayerTag, finalScore: number, roundScores: number[]) => void;
+  initialPlayerTag?: string;
 }
 
 export function FinalResultsPhase({
   rounds,
   onPlayAgain,
   onSaveScore,
+  initialPlayerTag = "",
 }: FinalResultsPhaseProps) {
   const averageScore = rounds.reduce((sum, round) => sum + (round.score ?? 0), 0) / rounds.length;
   const roundScores = rounds.map((round) => round.score ?? 0);
   const [scoreStr, setScoreStr] = useState("00.0");
   const [buttonVisible, setButtonVisible] = useState(false);
-  const [playerTag, setPlayerTag] = useState("");
+  const [playerTag, setPlayerTag] = useState(initialPlayerTag);
   const [hasDecidedSave, setHasDecidedSave] = useState(false);
   const [savedScore, setSavedScore] = useState(false);
   const [showTagError, setShowTagError] = useState(false);

@@ -18,6 +18,8 @@ export default function Home() {
   const [currentRound, setCurrentRound] = useState(0);
   const [guess, setGuess] = useState<HSL>({ h: 180, s: 50, l: 50 });
   const [animKey, setAnimKey] = useState(0);
+  const activePlayerName = useHighScoresStore((state) => state.activePlayerName);
+  const setActivePlayerName = useHighScoresStore((state) => state.setActivePlayerName);
   const addHighScore = useHighScoresStore((state) => state.addHighScore);
 
   const startGame = useCallback(() => {
@@ -92,9 +94,17 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-zinc-50 px-4">
-      <div className="w-full max-w-2xl" key={animKey}>
+      <div
+        className="w-full max-w-2xl"
+        key={animKey}
+      >
         {phase === "start" && (
-          <StartPhase onStart={startGame} />
+          <StartPhase
+            onStart={startGame}
+            onViewHighScores={() => handleViewTopScores("start")}
+            activePlayerName={activePlayerName}
+            onChangePlayerName={setActivePlayerName}
+          />
         )}
         {phase === "memorize" && currentRoundData && (
           <MemorizePhase
@@ -121,6 +131,7 @@ export default function Home() {
             rounds={rounds}
             onPlayAgain={handlePlayAgain}
             onSaveScore={handleSaveScore}
+            initialPlayerTag={activePlayerName}
           />
         )}
         {phase === "highscores" && (

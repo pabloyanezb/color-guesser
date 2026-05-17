@@ -20,7 +20,7 @@ export function HighScoresPhase({ buttonLabel, onButtonClick }: HighScoresPhaseP
         High Scores
       </p>
 
-      <div className="border-4 border-black bg-white md:w-lg min-h-50 p-4 mx-auto">
+      <div className="border-4 border-black bg-white w-full md:w-lg min-h-50 p-4 mx-auto">
         <p className="text-sm font-bold uppercase tracking-widest mb-3">
           {activePlayerName ? `Top 5 (${activePlayerName})` : "Top 5"}
         </p>

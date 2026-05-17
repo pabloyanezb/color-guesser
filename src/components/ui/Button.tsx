@@ -4,7 +4,7 @@ interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
   variant?: "primary" | "brand" | "info" | "success" | "warning";
-  size?: "default" | "sm";
+  size?: "md" | "sm" | "xs";
   fullWidth?: boolean;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
@@ -43,16 +43,20 @@ export function Button({
   children,
   onClick,
   variant = "primary",
-  size = "default",
+  size = "md",
   fullWidth = false,
   disabled = false,
   type = "button",
   className,
 }: ButtonProps) {
   const v = variants[variant];
-  const sizeClass = size === "sm"
-    ? "py-2 px-4 text-base"
-    : "py-4 px-8 text-2xl";
+  const sizes = {
+    md: "py-4 px-8 text-2xl",
+    sm: "py-2 px-4 text-base",
+    xs: "py-0 px-1 text-sm",
+  };
+
+  const sizeClass = sizes[size];
 
   return (
     <button
