@@ -8,6 +8,7 @@ const PLAYER_TAG_MAX_LENGTH = 4;
 
 export function StartPhase({
   onStart,
+  onViewHighScores,
   activePlayerName = "",
   onChangePlayerName,
 }: StartPhaseProps) {
@@ -141,6 +142,17 @@ export function StartPhase({
           Name required (3-4 letters or numbers)
         </p>
       </form>
+      {onViewHighScores && (
+        <div className="fade-in flex items-end">
+          <button
+            type="button"
+            onClick={onViewHighScores}
+            className="text-sm font-bold uppercase tracking-widest underline underline-offset-4 text-zinc-500 hover:text-zinc-800 transition-colors cursor-pointer"
+          >
+            View High Scores
+          </button>
+        </div>
+      )}
     </div>
   );
 }

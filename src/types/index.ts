@@ -35,6 +35,7 @@ export interface GameState {
 
 export interface StartPhaseProps {
   onStart: () => void;
+  onViewHighScores?: () => void;
   activePlayerName?: string;
   onChangePlayerName?: (name: string) => void;
 }

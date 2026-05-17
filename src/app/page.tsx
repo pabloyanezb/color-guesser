@@ -101,6 +101,7 @@ export default function Home() {
         {phase === "start" && (
           <StartPhase
             onStart={startGame}
+            onViewHighScores={() => handleViewTopScores("start")}
             activePlayerName={activePlayerName}
             onChangePlayerName={setActivePlayerName}
           />
