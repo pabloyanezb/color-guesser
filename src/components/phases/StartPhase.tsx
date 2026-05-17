@@ -26,6 +26,7 @@ export function StartPhase({
   }, [isEditingName, playerTag]);
 
   const handleStartEditing = () => {
+    if (isEditingName) return;
     setPlayerTag(activePlayerName);
     setShowTagError(false);
     setIsEditingName(true);
@@ -74,15 +75,20 @@ export function StartPhase({
             setIsEditingName(false);
           }}
         >
-          <div className="flex items-center whitespace-pre-wrap transition-all duration-200 ease-out">
+          <div
+            onClick={handleStartEditing}
+            className={clsx(
+              "flex items-center whitespace-pre-wrap transition-all duration-200 ease-out",
+              !isEditingName && "cursor-pointer hover:text-zinc-600",
+            )}
+          >
             <span className="text-md font-bold uppercase tracking-widest underline underline-offset-4 py-2">Player: </span>
 
             <div className="relative w-12">
               <button
                 type="button"
-                onClick={handleStartEditing}
                 className={clsx(
-                  "absolute inset-0 text-left text-md font-bold uppercase tracking-widest",
+                  "absolute inset-0 text-left text-md font-bold uppercase tracking-widest cursor-pointer",
                   "underline underline-offset-4 transition-all duration-200 ease-out",
                   isEditingName
                     ? "opacity-0 -translate-x-1 pointer-events-none"
@@ -96,6 +102,7 @@ export function StartPhase({
                 ref={inputRef}
                 type="text"
                 value={playerTag}
+                onClick={(e) => e.stopPropagation()}
                 onChange={(event) => {
                   const nextTag = event.target.value
                     .toUpperCase()
